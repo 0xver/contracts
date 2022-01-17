@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import "./IERC20.sol";
 
 /**
- * @dev Implementation of the {IERC20} interface
+ * @dev Implementation of the IERC20 interface
  */
 contract ERC20 is IERC20 {
     /**

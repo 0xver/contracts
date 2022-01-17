@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import "./IERC165.sol";
 
 /**
- * @dev Implementation of the {IERC165} interface
+ * @dev Implementation of the IERC165 interface
  */
 abstract contract ERC165 is IERC165 {
     /**

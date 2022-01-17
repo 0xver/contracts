@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import "../IERC721.sol";
 
 /**
- * @title Interface for ERC721Metadata as defined in the EIP-721
+ * @dev Interface for ERC721Metadata as defined in the EIP-721
  */
 interface IERC721Metadata is IERC721 {
     /**

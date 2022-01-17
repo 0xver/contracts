@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import "./IERC721.sol";
 import "./extensions/IERC721Enumerable.sol";
 import "./extensions/IERC721Metadata.sol";
-import "./wallet/IERC721Receiver.sol";
+import "./receiver/IERC721Receiver.sol";
 import "../165/ERC165.sol";
 import "../2981/IERC2981.sol";
 import "../../utils/Address.sol";

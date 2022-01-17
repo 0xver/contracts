@@ -10,19 +10,30 @@ import "../utils/Strings.sol";
  * @dev Contract module that allows children to implement role-based access
  */
 abstract contract AccessControl is IAccessControl, ERC165 {
+    /**
+     * @dev AccessControl definitions
+     */
+
+    // Maps key to role data
+    mapping(bytes32 => RoleData) private _roles;
+
+    // Admin key
+    bytes32 public constant ADMIN_KEY = 0x00;
+
+    // System key
+    bytes32 public constant SYSTEM_KEY = keccak256("SYSTEM_KEY");
+
+    // User key
+    bytes32 public constant USER_KEY = keccak256("USER_KEY");
+
+    // Role data structure
     struct RoleData {
         mapping(address => bool) members;
         bytes32 adminRole;
     }
 
-    mapping(bytes32 => RoleData) private _roles;
-
-    bytes32 public constant ADMIN_KEY = 0x00;
-    bytes32 public constant SYSTEM_KEY = keccak256("SYSTEM_KEY");
-    bytes32 public constant UTILITY_KEY = keccak256("UTILITY_KEY");
-
     /**
-     * @dev Modifier that checks that an account has a specific role
+     * @dev Modifier checks if account has specific role
      */
     modifier onlyRole(bytes32 role) {
         _checkRole(role, msg.sender);
@@ -37,15 +48,41 @@ abstract contract AccessControl is IAccessControl, ERC165 {
     }
 
     /**
-     * @dev Returns `true` if `account` has been granted `role`
+     * @dev AccessControl public functions
      */
+
+    // Returns `true` if `account` has been granted `role`
     function hasRole(bytes32 role, address account) public view override returns (bool) {
         return _roles[role].members[account];
     }
 
+    // Returns the admin role that controls `role`
+    function getRoleAdmin(bytes32 role) public view override returns (bytes32) {
+        return _roles[role].adminRole;
+    }
+
+    // Grants `role` to `account`
+    function grantRole(bytes32 role, address account) public virtual override onlyRole(getRoleAdmin(role)) {
+        _grantRole(role, account);
+    }
+
+    // Revokes `role` from `account`
+    function revokeRole(bytes32 role, address account) public virtual override onlyRole(getRoleAdmin(role)) {
+        _revokeRole(role, account);
+    }
+
+    // Revokes `role` from the calling account
+    function renounceRole(bytes32 role, address account) public virtual override {
+        require(account == msg.sender, "AccessControl: can only renounce roles for self");
+
+        _revokeRole(role, account);
+    }
+
     /**
-     * @dev Revert with a standard message if `account` is missing `role`
+     * @dev AccessControl internal functions
      */
+
+    // Internally checks if `account` is missing `role`
     function _checkRole(bytes32 role, address account) internal view {
         if (!hasRole(role, account)) {
             revert(
@@ -61,57 +98,23 @@ abstract contract AccessControl is IAccessControl, ERC165 {
         }
     }
 
-    /**
-     * @dev Returns the admin role that controls `role`
-     */
-    function getRoleAdmin(bytes32 role) public view override returns (bytes32) {
-        return _roles[role].adminRole;
-    }
-
-    /**
-     * @dev Grants `role` to `account`
-     */
-    function grantRole(bytes32 role, address account) public virtual override onlyRole(getRoleAdmin(role)) {
-        _grantRole(role, account);
-    }
-
-    /**
-     * @dev Revokes `role` from `account`
-     */
-    function revokeRole(bytes32 role, address account) public virtual override onlyRole(getRoleAdmin(role)) {
-        _revokeRole(role, account);
-    }
-
-    /**
-     * @dev Revokes `role` from the calling account
-     */
-    function renounceRole(bytes32 role, address account) public virtual override {
-        require(account == msg.sender, "AccessControl: can only renounce roles for self");
-
-        _revokeRole(role, account);
-    }
-
-    /**
-     * @dev Grants `role` to `account`
-     */
+    // Internally grants `role` to `account` in the constructor function only
     function _setupRole(bytes32 role, address account) internal virtual {
         _grantRole(role, account);
     }
 
     /**
-     * @dev Sets `adminRole` as `role` admin role
-     *
-     * Emits a {RoleAdminChanged} event
+     * @dev AccessControl event emitting internal functions
      */
+
+    // Emits {RoleAdminChanged} event and sets `adminRole` as `role` admin role
     function _setRoleAdmin(bytes32 role, bytes32 adminRole) internal virtual {
         bytes32 previousAdminRole = getRoleAdmin(role);
         _roles[role].adminRole = adminRole;
         emit RoleAdminChanged(role, previousAdminRole, adminRole);
     }
 
-    /**
-     * @dev Grants `role` to `account`
-     */
+    // Emits {RoleGranted} event and grants `role` to `account`
     function _grantRole(bytes32 role, address account) internal virtual {
         if (!hasRole(role, account)) {
             _roles[role].members[account] = true;
@@ -119,9 +122,7 @@ abstract contract AccessControl is IAccessControl, ERC165 {
         }
     }
 
-    /**
-     * @dev Revokes `role` from `account`
-     */
+    // Emits {RoleRevoked} event and revokes `role` from `account`
     function _revokeRole(bytes32 role, address account) internal virtual {
         if (hasRole(role, account)) {
             _roles[role].members[account] = false;
