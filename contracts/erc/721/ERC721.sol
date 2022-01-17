@@ -295,7 +295,7 @@ contract ERC721 is ERC165, IERC721, IERC721Enumerable, IERC721Metadata, IERC2981
 
     // Internally sets `_tokenCID` as the token CID of `tokenId` token
     function _setTokenCID(uint256 tokenId, string memory _tokenCID) internal virtual {
-        require(_exists(tokenId), "ERC721Metadata: URI set of nonexistent token");
+        require(_exists(tokenId), "ERC721Metadata: nonexistent token");
         _tokenCIDs[tokenId] = _tokenCID;
     }
 
