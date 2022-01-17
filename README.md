@@ -19,6 +19,9 @@ npm install
 # Usage
 ### Getting Started
 Navigate to `contracts/` and create a smart contract using `MyFungibleToken.sol` or `MyNonFungibleToken.sol`
+```
+cd contract-lib && open .
+```
 
 ### Compile
 Run the command to compile `MyFungibleToken.sol` or `MyNonFungibleToken.sol`
