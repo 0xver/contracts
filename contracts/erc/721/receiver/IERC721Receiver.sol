@@ -3,7 +3,7 @@
 pragma solidity ^0.8.0;
 
 /**
- * @title Interface for ERC721TokenReceiver as defined in EIP-721
+ * @dev Interface for ERC721TokenReceiver as defined in EIP-721
  */
 interface IERC721Receiver {
     /**
