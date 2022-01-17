@@ -285,21 +285,6 @@ contract ERC721 is ERC165, IERC721, IERC721Enumerable, IERC721Metadata, IERC2981
     }
 
     /**
-     * @dev URI storage internal functions
-     */
-
-    // Internally returns base URI for computing token CIDs
-    function baseURI() internal view virtual returns (string memory) {
-        return "ipfs://";
-    }
-
-    // Internally sets `_tokenCID` as the token CID of `tokenId` token
-    function _setTokenCID(uint256 tokenId, string memory _tokenCID) internal virtual {
-        require(_exists(tokenId), "ERC721Metadata: nonexistent token");
-        _tokenCIDs[tokenId] = _tokenCID;
-    }
-
-    /**
      * @dev ERC721 and ERC721Metadata interal functions
      */
     
@@ -335,7 +320,22 @@ contract ERC721 is ERC165, IERC721, IERC721Enumerable, IERC721Metadata, IERC2981
         require(_checkOnERC721Received(from, to, tokenId, _data), "ERC721: transfer to non ERC721Receiver implementer");
     }
 
-    // Internally invokes {IERC721Receiver-onERC721Received} on a target address
+    // Internally returns base URI for computing token CIDs
+    function baseURI() internal view virtual returns (string memory) {
+        return "ipfs://";
+    }
+
+    // Internally sets `_tokenCID` as the token CID of `tokenId` token
+    function _setTokenCID(uint256 tokenId, string memory _tokenCID) internal virtual {
+        require(_exists(tokenId), "ERC721Metadata: nonexistent token");
+        _tokenCIDs[tokenId] = _tokenCID;
+    }
+
+    /**
+     * @dev ERC721 private functions
+     */
+
+    // Invokes {IERC721Receiver-onERC721Received} on a target address
     function _checkOnERC721Received(address from, address to, uint256 tokenId, bytes memory _data) private returns (bool) {
         if (to.isContract()) {
             try IERC721Receiver(to).onERC721Received(msg.sender, from, tokenId, _data) returns (bytes4 retval) {
