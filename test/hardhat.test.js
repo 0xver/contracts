@@ -29,7 +29,7 @@ const { ethers } = require("hardhat");
      */
 
     // Gets owner address and second address
-    const [addr1, addr2] = await ethers.getSigners();
+    const [addr1, addr2, addr3] = await ethers.getSigners();
 
     // Deploys tokens
     var Token
@@ -89,7 +89,7 @@ const { ethers } = require("hardhat");
     expect(await MyNonFungibleToken.balanceOf(addr1.address)).equal(0)
 
     // Mints first token without royalty
-    await MyNonFungibleToken.mint(addr1.address, "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
+    await MyNonFungibleToken.publicMint(addr1.address, "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
 
     // Token balance should equal 1
     expect(await MyNonFungibleToken.balanceOf(addr1.address)).equal(1)
@@ -101,7 +101,7 @@ const { ethers } = require("hardhat");
     expect(await MyNonFungibleToken.royaltyInfo(0, ethers.utils.parseEther("5"))).eql([addr1.address, ethers.utils.parseEther("0")])
 
     // Mints second token with royalty
-    await MyNonFungibleToken.mintWithRoyalty(addr1.address, "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi", 10)
+    await MyNonFungibleToken.publicMintWithRoyalty(addr1.address, "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi", 10)
 
     // Token balance should equal 2
     expect(await MyNonFungibleToken.balanceOf(addr1.address)).equal(2)
@@ -119,6 +119,21 @@ const { ethers } = require("hardhat");
 
     // Owner of tokenId #1 should be addr2
     expect(await MyNonFungibleToken.ownerOf(1)).equal(addr2.address)
+
+    // Token balance should equal 0
+    expect(await MyNonFungibleToken.balanceOf(addr3.address)).equal(0)
+
+    // Add account to whitelist
+    await MyNonFungibleToken.addToWhitelist(addr3.address)
+
+    // Whitelist mint
+    await MyNonFungibleToken.connect(addr3).whitelistMint(addr3.address, "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
+
+    // Token balance should equal 1
+    expect(await MyNonFungibleToken.balanceOf(addr1.address)).equal(1)
+
+    // Token URI should return correct identifier
+    expect(await MyNonFungibleToken.tokenURI(2)).equal("ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
   });
 });
 
