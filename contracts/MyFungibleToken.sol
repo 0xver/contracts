@@ -35,7 +35,7 @@ contract MyFungibleToken is ERC20, Ownable, ReentrancyGuard {
     event Withdrawal(address owner, address receiver, uint256 amount);
 
     /**
-     * @dev Staking definitions
+     * @dev MyFungibleToken definitions
      */
 
     // Maps staker account to timestamp
