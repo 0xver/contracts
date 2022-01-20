@@ -36,46 +36,86 @@ contract MyNonFungibleToken is ERC721, Ownable, ReentrancyGuard {
     event Withdrawal(address caller, address receiver, uint256 amount);
 
     /**
+     * @dev MyNonFungibleToken definitions
+     */
+
+    // Maps account to whitelist status
+    mapping(address => uint256) private _whitelist;
+
+    /**
      * @dev Sets ERC721 constructor values
      */
     constructor() ERC721("My Non-Fungible Token", "MNFT") {
     }
 
     /**
-     * @dev Example mint function that emits {Mint} event
-     */
-    function mint(address receiver, string memory cid) public gate() {
-        _safeMint(receiver, _tokenIdCounter.current());
-        uint256 tokenId = _tokenIdCounter.current();
-        _setTokenCID(tokenId, cid);
-        _tokenIdCounter.increment();
-
-        _setTokenRoyalty(tokenId, receiver, 0);
-
-        emit Mint(receiver, tokenId, cid);
-    }
-
-    /**
-     * @dev Example mint with royalty function that emits {Mint} event
-     */
-    function mintWithRoyalty(address receiver, string memory cid, uint256 percent) public gate() {
-        _safeMint(receiver, _tokenIdCounter.current());
-        uint256 tokenId = _tokenIdCounter.current();
-        _setTokenCID(tokenId, cid);
-        _tokenIdCounter.increment();
-
-        _setTokenRoyalty(tokenId, receiver, percent);
-
-        emit Mint(receiver, tokenId, cid);
-    }
-
-    /**
      * @dev Example withdraw ether function that emits {Withdrawal} event
      */
-    function withdraw(address receiver) public onlyOwner {
-        (bool success, ) = payable(receiver).call{value: address(this).balance}("");
+    function withdraw(address account) public onlyOwner {
+        (bool success, ) = payable(account).call{value: address(this).balance}("");
         require(success, "MyNonFungibleToken: ether transfer failed");
 
-        emit Withdrawal(msg.sender, receiver, address(this).balance);
+        emit Withdrawal(msg.sender, account, address(this).balance);
+    }
+
+    /**
+     * @dev Example internal event emitting mint function
+     */
+    function _minter(address account, string memory cid, uint256 percent) internal gate() {
+        uint256 tokenId = _tokenIdCounter.current();
+        _safeMint(account, tokenId);
+        _setTokenCID(tokenId, cid);
+        _tokenIdCounter.increment();
+        if (percent != 0) {
+            _setTokenRoyalty(tokenId, account, percent);
+        } else {
+            _setTokenRoyalty(tokenId, account, 0);
+        }
+
+        emit Mint(account, tokenId, cid);
+    }
+
+    /**
+     * @dev Example check for whitelist modifier
+     */
+    modifier whitelist(address account) {
+        require(_whitelist[msg.sender] != 0, "MyNonFungibleToken: account not in whitelist");
+        _;
+    }
+
+    /**
+     * @dev Example add account to whitelist function
+     */
+    function addToWhitelist(address account) public onlyOwner {
+        require(_whitelist[account] != 1, "MyNonFungibleToken: account already in whitelist");
+        _whitelist[account] = 1;
+    }
+
+    /**
+     * @dev Example whitelist mint function
+     */
+    function whitelistMint(address account, string memory cid) public whitelist(account) {
+        _minter(account, cid, 0);
+    }
+
+    /**
+     * @dev Example whitelist mint with royalty function
+     */
+    function whitelistMintWithRoyalty(address account, string memory cid, uint256 percent) public whitelist(account) {
+        _minter(account, cid, percent);
+    }
+
+    /**
+     * @dev Example public mint function
+     */
+    function publicMint(address account, string memory cid) public {
+        _minter(account, cid, 0);
+    }
+
+    /**
+     * @dev Example public mint with royalty function
+     */
+    function publicMintWithRoyalty(address account, string memory cid, uint256 percent) public {
+        _minter(account, cid, percent);
     }
 }
