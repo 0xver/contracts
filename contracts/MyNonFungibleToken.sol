@@ -108,6 +108,8 @@ contract MyNonFungibleToken is ERC721, Ownable, ReentrancyGuard {
      * @dev Example whitelist mint with royalty function
      */
     function whitelistMintWithRoyalty(address account, string memory cid, uint256 percent) public whitelist(account) {
+        require(_whitelistMint[account] != 0, "MyNonFungibleToken: whitelist account already minted");
+        _whitelistMint[account] = 0;
         _minter(account, cid, percent);
     }
 
