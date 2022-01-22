@@ -42,9 +42,6 @@ contract MyNonFungibleToken is ERC721, Ownable, ReentrancyGuard {
     // Maps account to whitelist status
     mapping(address => uint256) private _whitelist;
 
-    // Maps account to whitelist mint status
-    mapping(address => uint256) private _whitelistMint;
-
     /**
      * @dev Sets ERC721 constructor values
      */
@@ -92,15 +89,14 @@ contract MyNonFungibleToken is ERC721, Ownable, ReentrancyGuard {
     function addToWhitelist(address account) public onlyOwner {
         require(_whitelist[account] != 1, "MyNonFungibleToken: account already in whitelist");
         _whitelist[account] = 1;
-        _whitelistMint[account] = 1;
     }
 
     /**
      * @dev Example whitelist mint function
      */
     function whitelistMint(address account, string memory cid) public whitelist(account) {
-        require(_whitelistMint[account] != 0, "MyNonFungibleToken: whitelist account already minted");
-        _whitelistMint[account] = 0;
+        require(_whitelist[account] != 0, "MyNonFungibleToken: whitelist account already minted");
+        _whitelist[account] = 0;
         _minter(account, cid, 0);
     }
 
@@ -108,8 +104,8 @@ contract MyNonFungibleToken is ERC721, Ownable, ReentrancyGuard {
      * @dev Example whitelist mint with royalty function
      */
     function whitelistMintWithRoyalty(address account, string memory cid, uint256 percent) public whitelist(account) {
-        require(_whitelistMint[account] != 0, "MyNonFungibleToken: whitelist account already minted");
-        _whitelistMint[account] = 0;
+        require(_whitelist[account] != 0, "MyNonFungibleToken: whitelist account already minted");
+        _whitelist[account] = 0;
         _minter(account, cid, percent);
     }
 
