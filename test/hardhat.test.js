@@ -127,7 +127,7 @@ const { ethers } = require("hardhat");
     await MyNonFungibleToken.addToWhitelist(addr3.address)
 
     // Whitelist mint
-    await MyNonFungibleToken.connect(addr3).whitelistMint(addr3.address, "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
+    await MyNonFungibleToken.connect(addr2).whitelistMint(addr3.address, "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
 
     // Token balance should equal 1
     expect(await MyNonFungibleToken.balanceOf(addr1.address)).equal(1)
