@@ -66,11 +66,7 @@ contract MyNonFungibleToken is ERC721, Ownable, ReentrancyGuard {
         _safeMint(account, tokenId);
         _setTokenCID(tokenId, cid);
         _tokenIdCounter.increment();
-        if (percent != 0) {
-            _setTokenRoyalty(tokenId, account, percent);
-        } else {
-            _setTokenRoyalty(tokenId, account, 0);
-        }
+        _setTokenRoyalty(tokenId, account, percent);
 
         emit Mint(account, tokenId, cid);
     }
