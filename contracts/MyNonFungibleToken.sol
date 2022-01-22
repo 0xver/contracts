@@ -82,7 +82,7 @@ contract MyNonFungibleToken is ERC721, Ownable, ReentrancyGuard {
      * @dev Example check for whitelist modifier
      */
     modifier whitelist(address account) {
-        require(_whitelist[msg.sender] != 0, "MyNonFungibleToken: account not in whitelist");
+        require(_whitelist[account] != 0, "MyNonFungibleToken: account not in whitelist");
         _;
     }
 
