@@ -61,7 +61,7 @@ contract MyNonFungibleToken is ERC721, Ownable, ReentrancyGuard {
     /**
      * @dev Example internal event emitting mint function
      */
-    function _minter(address account, string memory cid, uint256 percent) internal gate() {
+    function _minter(address account, string memory cid, uint256 percent) internal {
         uint256 tokenId = _tokenIdCounter.current();
         _safeMint(account, tokenId);
         _setTokenCID(tokenId, cid);
@@ -108,14 +108,14 @@ contract MyNonFungibleToken is ERC721, Ownable, ReentrancyGuard {
     /**
      * @dev Example public mint function
      */
-    function publicMint(address account, string memory cid) public {
+    function publicMint(address account, string memory cid) public gate() {
         _minter(account, cid, 0);
     }
 
     /**
      * @dev Example public mint with royalty function
      */
-    function publicMintWithRoyalty(address account, string memory cid, uint256 percent) public {
+    function publicMintWithRoyalty(address account, string memory cid, uint256 percent) public gate() {
         _minter(account, cid, percent);
     }
 }
