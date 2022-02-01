@@ -1,6 +1,6 @@
 # contract-lib
 
-![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg) ![build](https://github.com/ntkme/github-buttons/workflows/build/badge.svg)
+![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ## An Ethereum smart contract library with IPFS integration
 
