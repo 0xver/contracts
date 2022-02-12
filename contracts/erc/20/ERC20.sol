@@ -99,6 +99,7 @@ contract ERC20 is IERC20 {
     /**
      * @dev ERC20 interal functions
      */
+
     function _transfer(address _from, address _to, uint256 _value) internal virtual {
         require(_to != address(0), "ERC20: transfer to the zero address");
 
