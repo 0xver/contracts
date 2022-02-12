@@ -95,10 +95,10 @@ const { ethers } = require("hardhat");
     expect(await MyNonFungibleToken.balanceOf(addr1.address)).equal(1)
 
     // Token URI should return correct identifier
-    expect(await MyNonFungibleToken.tokenURI(0)).equal("ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
+    expect(await MyNonFungibleToken.tokenURI(1)).equal("ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
 
-    // Royalty for 5 ETH should be 0 ETH for tokenId #0
-    expect(await MyNonFungibleToken.royaltyInfo(0, ethers.utils.parseEther("5"))).eql([addr1.address, ethers.utils.parseEther("0")])
+    // Royalty for 5 ETH should be 0 ETH for tokenId #1
+    expect(await MyNonFungibleToken.royaltyInfo(1, ethers.utils.parseEther("5"))).eql([addr1.address, ethers.utils.parseEther("0")])
 
     // Mints second token with royalty
     await MyNonFungibleToken.publicMintWithRoyalty(addr1.address, "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi", 10)
@@ -107,18 +107,18 @@ const { ethers } = require("hardhat");
     expect(await MyNonFungibleToken.balanceOf(addr1.address)).equal(2)
 
     // Token URI should return correct identifier
-    expect(await MyNonFungibleToken.tokenURI(1)).equal("ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
+    expect(await MyNonFungibleToken.tokenURI(2)).equal("ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
   
-    // Royalty for 5 ETH should be 0.5 ETH for tokenId #1
-    expect(await MyNonFungibleToken.royaltyInfo(1, ethers.utils.parseEther("5"))).eql([addr1.address, ethers.utils.parseEther("0.5")])
+    // Royalty for 5 ETH should be 0.5 ETH for tokenId #2
+    expect(await MyNonFungibleToken.royaltyInfo(2, ethers.utils.parseEther("5"))).eql([addr1.address, ethers.utils.parseEther("0.5")])
 
-    // Owner of tokenId #1 should be addr1
-    expect(await MyNonFungibleToken.ownerOf(1)).equal(addr1.address)
+    // Owner of tokenId #2 should be addr1
+    expect(await MyNonFungibleToken.ownerOf(2)).equal(addr1.address)
 
-    await MyNonFungibleToken.connect(addr1).transferFrom(addr1.address, addr2.address, 1)
+    await MyNonFungibleToken.connect(addr1).transferFrom(addr1.address, addr2.address, 2)
 
     // Owner of tokenId #1 should be addr2
-    expect(await MyNonFungibleToken.ownerOf(1)).equal(addr2.address)
+    expect(await MyNonFungibleToken.ownerOf(2)).equal(addr2.address)
 
     // Token balance should equal 0
     expect(await MyNonFungibleToken.balanceOf(addr3.address)).equal(0)
@@ -184,10 +184,10 @@ describe("", function () {
 });
 
 /**
- * @dev Checks for ERC721Enumerable support for MyNonFungibleToken
+ * @dev Checks for ERC721Receiver support for MyNonFungibleToken
  */
 describe("", function () {
-  it("ERC721Enumerable support for MyNonFungibleToken", async function () {
+  it("ERC721Receiver support for MyNonFungibleToken", async function () {
     /**
      * @dev Contract deployments
      */
@@ -198,11 +198,11 @@ describe("", function () {
     const MyNonFungibleToken = await Token.deploy();
 
     /**
-     * @dev Check for ERC721Enumerable support
+     * @dev Check for ERC721Receiver support
      */
 
     // Should return true
-    expect(await MyNonFungibleToken.supportsInterface(ethers.utils . hexlify(0x780e9d63))).equal(true)
+    expect(await MyNonFungibleToken.supportsInterface(ethers.utils . hexlify(0x150b7a02))).equal(true)
   });
 });
 
