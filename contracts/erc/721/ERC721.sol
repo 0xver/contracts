@@ -161,7 +161,7 @@ contract ERC721 is IERC721, IERC721Metadata {
         require(_tokenOwner[_tokenId] == msg.sender || _tokenApproval[_tokenId] == msg.sender || _operatorApproval[_from][msg.sender] == true, "ERC721: unauthorized transfer");
         require(_to != address(0), "ERC721: cannot transfer to the zero address");
 
-        _ownerBalance[msg.sender] -= 1;
+        _ownerBalance[_from] -= 1;
         _tokenOwner[_tokenId] = _to;
         _tokenApproval[_tokenId] = address(0);
         _ownerBalance[_to] += 1;
@@ -173,7 +173,7 @@ contract ERC721 is IERC721, IERC721Metadata {
         require(ERC721.ownerOf(_tokenId) == _from, "ERC721: from address is not owner of token");
         require(_tokenOwner[_tokenId] == msg.sender || _tokenApproval[_tokenId] == msg.sender || _operatorApproval[_from][msg.sender] == true, "ERC721: unauthorized transfer");
 
-        _ownerBalance[msg.sender] -= 1;
+        _ownerBalance[_from] -= 1;
         _tokenOwner[_tokenId] = _to;
         _tokenApproval[_tokenId] = address(0);
         _totalSupply -= 1;
