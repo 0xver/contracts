@@ -3,7 +3,9 @@
 pragma solidity ^0.8.0;
 
 /**
- * @dev Interface of the ERC165 standard as defined in the EIP
+ * @title ERC165 Interface
+ *
+ * @dev Interface of the ERC165 standard according to the EIP
  */
 interface IERC165 {
     /**

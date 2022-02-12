@@ -3,12 +3,23 @@
 pragma solidity ^0.8.0;
 
 /**
- * @dev Interface of the ERC20 standard as defined in the EIP
+ * @title ERC20 Interface
+ *
+ * @dev Interface of the ERC20 standard according to the EIP
  */
 interface IERC20 {
     /**
+     * @dev ERC20 standard events
+     */
+
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);
+
+    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+
+    /**
      * @dev ERC20 standard functions
      */
+
     function name() external view returns (string memory);
 
     function symbol() external view returns (string memory);
@@ -17,20 +28,13 @@ interface IERC20 {
 
     function totalSupply() external view returns (uint256);
 
-    function balanceOf(address account) external view returns (uint256);
+    function balanceOf(address _owner) external view returns (uint256);
 
-    function transfer(address recipient, uint256 amount) external returns (bool);
+    function transfer(address _to, uint256 _value) external returns (bool);
 
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    function transferFrom(address _from, address _to, uint256 _value) external returns (bool);
 
-    function approve(address spender, uint256 amount) external returns (bool);
+    function approve(address _spender, uint256 _value) external returns (bool);
 
-    function allowance(address owner, address spender) external view returns (uint256);
-
-    /**
-     * @dev ERC20 standard events
-     */
-    event Transfer(address indexed from, address indexed to, uint256 value);
-
-    event Approval(address indexed owner, address indexed spender, uint256 value);
+    function allowance(address _owner, address _spender) external view returns (uint256);
 }
