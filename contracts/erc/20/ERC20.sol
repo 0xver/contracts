@@ -98,7 +98,7 @@ contract ERC20 is IERC20 {
     }
 
     /**
-     * @dev ERC20 interal functions
+     * @dev ERC20 internal functions
      */
 
     function _transfer(address _from, address _to, uint256 _value) internal virtual {
