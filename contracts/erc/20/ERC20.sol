@@ -91,9 +91,9 @@ contract ERC20 is IERC20 {
         return true;
     }
 
-    function allowance(address owner, address spender) public view virtual override returns (uint256) {
+    function allowance(address _owner, address _spender) public view virtual override returns (uint256) {
 
-        return _allowances[owner][spender];
+        return _allowances[_owner][_spender];
     }
 
     /**
