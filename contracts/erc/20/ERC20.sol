@@ -68,11 +68,12 @@ contract ERC20 is IERC20 {
     }
 
     function transferFrom(address _from, address _to, uint256 _value) public virtual override returns (bool) {
+        require(balanceOf(_from) >= _value, "ERC20: value exceeds balance");
+
         if (msg.sender != _from) {
             require(balanceOf(_from) >= allowance(_from, msg.sender), "ERC20: allowance exceeds balance");
+
             _allowances[_from][msg.sender] -= _value;
-        } else {
-            require(balanceOf(msg.sender) >= _value, "ERC20: value exceeds balance");
         }
 
         _transfer(_from, _to, _value);
