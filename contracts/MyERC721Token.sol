@@ -24,37 +24,30 @@ contract MyERC721Token is ERC721Royalty, Ownable, ReentrancyGuard {
     event Withdrawal(address operator, address receiver, uint256 value);
 
     /**
-     * @dev MyNonFungibleToken definitions
+     * @dev MyERC721Token definitions
      */
 
     mapping(address => uint256) private _whitelist;
+    bool private _publicMintStatus = false;
 
     /**
      * @dev Sets ERC721 constructor values
      */
 
     constructor() ERC721("My ERC721 Token", "TKN") Ownable(msg.sender) {
+        // Bored Ape Yacht Club used as an example
+        _setExtendedBaseUri("QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/");
     }
 
     /**
      * @dev Internal mint routing
      */
 
-    function _routeMint(address _to, string memory _cid, uint256 _percent) internal {
-        _mint(_to, _cid);
+    function _routeMint(address _to, uint256 _percent) internal {
+        _mint(_to);
         _setTokenRoyalty(_currentTokenId(), _to, _percent);
 
-        emit Mint(_to, _currentTokenId(), _cid);
-    }
-
-    /**
-     * @dev Checks if account is whitelisted
-     */
-
-    modifier whitelist(address _account) {
-        require(_whitelist[_account] != 0, "MyERC721Token: account not in whitelist");
-
-        _;
+        emit Mint(_to, _currentTokenId(), tokenURI(_currentTokenId()));
     }
 
     /**
@@ -68,39 +61,27 @@ contract MyERC721Token is ERC721Royalty, Ownable, ReentrancyGuard {
     }
 
     /**
-     * @dev Whitelist mint function
+     * @dev Initiate public mint
      */
 
-    function whitelistMint(address _account, string memory cid) public whitelist(_account) {
-        require(_whitelist[_account] != 0, "MyERC721Token: whitelist account already minted");
-
-        _whitelist[_account] = 0;
-        _routeMint(_account, cid, 0);
+    function initiatePublicMint() public onlyOwner {
+        _publicMintStatus = true;
     }
 
     /**
-     * @dev Whitelist mint with royalty function
+     * @dev Mint function with pre-mint for whitelist
      */
 
-    function whitelistMintWithRoyalty(address _account, string memory cid, uint256 percent) public whitelist(_account) {
-        require(_whitelist[_account] != 0, "MyERC721Token: whitelist account already minted");
+    function mint(address _account, uint256 _percent) public gate {
+        if (_publicMintStatus == false) {
+            require(_whitelist[_account] != 0, "MyERC721Token: account not in whitelist");
 
-        _whitelist[_account] = 0;
-        _routeMint(_account, cid, percent);
-    }
+            _whitelist[_account] = 0;
 
-    /**
-     * @dev Public mint function
-     */
-    function publicMint(address _account, string memory cid) public gate() {
-        _routeMint(_account, cid, 0);
-    }
-
-    /**
-     * @dev Public mint with royalty function
-     */
-    function publicMintWithRoyalty(address _account, string memory cid, uint256 percent) public gate() {
-        _routeMint(_account, cid, percent);
+            _routeMint(_account, _percent);
+        } else {
+            _routeMint(_account, _percent);
+        }
     }
 
     /**

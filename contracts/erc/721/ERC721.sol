@@ -6,22 +6,24 @@ import "../165/IERC165.sol";
 import "./IERC721.sol";
 import "./extensions/IERC721Metadata.sol";
 import "./receiver/IERC721Receiver.sol";
+import "../../utility/String.sol";
 
 /**
  * @title ERC721 Contract
  *
  * @dev Implementation of the ERC721 standard
  */
-contract ERC721 is IERC165, IERC721, IERC721Metadata {
+contract ERC721 is IERC165, IERC721, IERC721Metadata, String {
     /**
      * @dev ERC721 definitions
      */
 
     mapping(uint256 => address) private _tokenOwner;
     mapping(address => uint256) private _ownerBalance;
-    mapping(uint256 => string) private _tokenCid;
     mapping(uint256 => address) private _tokenApproval;
     mapping(address => mapping(address => bool)) private _operatorApproval;
+
+    string private _extendedBaseUri;
 
     uint256 private _currentId = 0;
     uint256 private _totalSupply = 0;
@@ -49,26 +51,24 @@ contract ERC721 is IERC165, IERC721, IERC721Metadata {
     }
 
     function tokenURI(uint256 _tokenId) public view virtual override returns (string memory) {
-        string memory tokenCid = _tokenCid[_tokenId];
 
-        return string(abi.encodePacked(_baseUri(), tokenCid));
+        return string(abi.encodePacked(_baseUri(), _extendedBaseUri, toString(_tokenId)));
     }
 
     /**
      * @dev Minting functions
      */
 
-    function _mint(address _to, string memory _cid) internal virtual {
-        _mintSingleToken(_to, _cid);
+    function _mint(address _to) internal virtual {
+        _mintSingleToken(_to);
     }
 
-    function _mintSingleToken(address _to, string memory _cid) internal virtual {
+    function _mintSingleToken(address _to) internal virtual {
         require(_to != address(0), "ERC721: cannot mint to the zero address");
 
         _currentId += 1;
         _totalSupply += 1;
         _tokenOwner[_currentId] = _to;
-        _tokenCid[_currentId] = _cid;
         _ownerBalance[_to] += 1;
 
         emit Transfer(address(0), _to, _currentId);
@@ -82,6 +82,10 @@ contract ERC721 is IERC165, IERC721, IERC721Metadata {
     function _baseUri() internal view virtual returns (string memory) {
 
         return "ipfs://";
+    }
+
+    function _setExtendedBaseUri(string memory _extension) internal virtual {
+        _extendedBaseUri = _extension;
     }
 
     function totalSupply() public virtual returns (uint256) {
