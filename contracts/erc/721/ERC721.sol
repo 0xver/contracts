@@ -2,6 +2,7 @@
 
 pragma solidity ^0.8.0;
 
+import "../165/IERC165.sol";
 import "./IERC721.sol";
 import "./extensions/IERC721Metadata.sol";
 import "./receiver/IERC721Receiver.sol";
@@ -11,7 +12,7 @@ import "./receiver/IERC721Receiver.sol";
  *
  * @dev Implementation of the ERC721 standard
  */
-contract ERC721 is IERC721, IERC721Metadata {
+contract ERC721 is IERC165, IERC721, IERC721Metadata {
     /**
      * @dev ERC721 definitions
      */
@@ -83,9 +84,9 @@ contract ERC721 is IERC721, IERC721Metadata {
     }
 
     function tokenURI(uint256 _tokenId) public view virtual override returns (string memory) {
-        string memory tokenCID = _tokenCid[_tokenId];
+        string memory tokenCid = _tokenCid[_tokenId];
 
-        return string(abi.encodePacked(baseURI(), tokenCID));
+        return string(abi.encodePacked(baseURI(), tokenCid));
     }
 
     /**
@@ -94,6 +95,7 @@ contract ERC721 is IERC721, IERC721Metadata {
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165) returns (bool) {
         return
+            interfaceId == type(IERC165).interfaceId ||
             interfaceId == type(IERC721).interfaceId ||
             interfaceId == type(IERC721Metadata).interfaceId ||
             interfaceId == type(IERC721Receiver).interfaceId;
@@ -136,7 +138,7 @@ contract ERC721 is IERC721, IERC721Metadata {
     }
 
     function setApprovalForAll(address _operator, bool _approved) public virtual override {
-        require(msg.sender != _operator, "ERC721: approve to caller");
+        require(msg.sender != _operator, "ERC721: cannot approve the owner");
         _operatorApproval[msg.sender][_operator] = _approved;
     
         emit ApprovalForAll(msg.sender, _operator, _approved);
@@ -193,12 +195,12 @@ contract ERC721 is IERC721, IERC721Metadata {
         if (size > 0) {
             try IERC721Receiver(_to).onERC721Received(msg.sender, _from, _tokenId, _data) returns (bytes4 response) {
                 if (response != IERC721Receiver.onERC721Received.selector) {
-                    revert("ERC1155: ERC1155Receiver rejected tokens");
+                    revert("ERC721: ERC721Receiver rejected tokens");
                 }
             } catch Error(string memory reason) {
                 revert(reason);
             } catch {
-                revert("ERC1155: transfer to non ERC1155Receiver implementer");
+                revert("ERC721: transfer to non ERC721Receiver implementer");
             }
         }
     }
