@@ -228,3 +228,26 @@ describe("", function () {
     expect(await MyNonFungibleToken.supportsInterface(ethers.utils . hexlify(0x2a55205a))).equal(true)
   });
 });
+
+/**
+ * @dev Checks for ERC165 support for MyNonFungibleToken
+ */
+ describe("", function () {
+  it("ERC165 support for MyNonFungibleToken", async function () {
+    /**
+     * @dev Contract deployments
+     */
+
+    // Deploys tokens
+    var Token
+    Token = await ethers.getContractFactory("MyNonFungibleToken");
+    const MyNonFungibleToken = await Token.deploy();
+
+    /**
+     * @dev Check for ERC165 support
+     */
+
+    // Should return true
+    expect(await MyNonFungibleToken.supportsInterface(ethers.utils . hexlify(0x01ffc9a7))).equal(true)
+  });
+});
