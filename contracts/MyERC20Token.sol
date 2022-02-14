@@ -11,18 +11,18 @@ import "./erc/20/ERC20.sol";
 import "./security/ReentrancyGuard.sol";
 
 /**
- * @title My Fungible Token
+ * @title My ERC20 Token
  *
  * @dev Extends ERC20 fungible token standard
  */
-contract MyFungibleToken is ERC20, Ownable, ReentrancyGuard {
+contract MyERC20Token is ERC20, Ownable, ReentrancyGuard {
     /**
      * @dev Events
      */
 
-    event Stake(address staker, uint256 amount, uint256 time);
-    event Claim(address staker, uint256 amount);
-    event Withdrawal(address owner, address receiver, uint256 amount);
+    event Stake(address staker, uint256 value, uint256 time);
+    event Claim(address staker, uint256 value);
+    event Withdrawal(address operator, address receiver, uint256 value);
 
     /**
      * @dev MyFungibleToken definitions
@@ -35,7 +35,7 @@ contract MyFungibleToken is ERC20, Ownable, ReentrancyGuard {
      * @dev Sets ERC20 constructor values and mints total token supply to deployer
      */
 
-    constructor() ERC20("My Fungible Token", "MFT") Ownable(msg.sender) {
+    constructor() ERC20("My ERC20 Token", "TKN") Ownable(msg.sender) {
         _mint(msg.sender, 1000000000 * 10 ** decimals());
     }
 
@@ -43,15 +43,15 @@ contract MyFungibleToken is ERC20, Ownable, ReentrancyGuard {
      * @dev Token staking function
      */
 
-    function stake(uint256 amount) public gate() {
+    function stake(uint256 _value) public gate() {
         require(balanceOf(msg.sender) > 0, "MyFungibleToken: zero token balance");
 
         _timestamp[msg.sender] = block.timestamp;
-        _staked[msg.sender] = amount;
+        _staked[msg.sender] = _value;
 
-        _transfer(msg.sender, address(this), amount);
+        _transfer(msg.sender, address(this), _value);
 
-        emit Stake(msg.sender, amount, 30 days);
+        emit Stake(msg.sender, _value, 30 days);
     }
 
     /**
@@ -78,10 +78,10 @@ contract MyFungibleToken is ERC20, Ownable, ReentrancyGuard {
      * @dev Withdraw ether from contract
      */
 
-    function withdraw(address receiver) public onlyOwner {
-        (bool success, ) = payable(receiver).call{value: address(this).balance}("");
+    function withdraw(address _to) public onlyOwner {
+        (bool success, ) = payable(_to).call{value: address(this).balance}("");
         require(success, "MyContract: ether transfer failed");
 
-        emit Withdrawal(msg.sender, receiver, address(this).balance);
+        emit Withdrawal(msg.sender, _to, address(this).balance);
     }
 }
