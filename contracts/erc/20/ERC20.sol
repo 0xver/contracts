@@ -83,7 +83,7 @@ contract ERC20 is IERC20 {
 
     function approve(address _spender, uint256 _value) public virtual override returns (bool) {
         require(_spender != address(0), "ERC20: cannot approve the zero address");
-        require(_spender != msg.sender, "ERC20: cannot approve caller");
+        require(_spender != msg.sender, "ERC20: cannot approve the owner");
 
         _allowances[msg.sender][_spender] = _value;
 
