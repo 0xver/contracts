@@ -19,8 +19,8 @@ contract ERC721 is IERC165, IERC721, IERC721Metadata {
 
     mapping(uint256 => address) private _tokenOwner;
     mapping(address => uint256) private _ownerBalance;
-    mapping(uint256 => address) private _tokenApproval;
     mapping(uint256 => string) private _tokenCid;
+    mapping(uint256 => address) private _tokenApproval;
     mapping(address => mapping(address => bool)) private _operatorApproval;
 
     uint256 private _currentId = 0;
@@ -30,7 +30,32 @@ contract ERC721 is IERC165, IERC721, IERC721Metadata {
     string private _symbol;
 
     /**
-     * @dev Minting related functions
+     * @dev ERC721Metadata functions
+     */
+    
+    constructor(string memory name_, string memory symbol_) {
+        _name = name_;
+        _symbol = symbol_;
+    }
+
+    function name() public view virtual override returns (string memory) {
+
+        return _name;
+    }
+
+    function symbol() public view virtual override returns (string memory) {
+
+        return _symbol;
+    }
+
+    function tokenURI(uint256 _tokenId) public view virtual override returns (string memory) {
+        string memory tokenCid = _tokenCid[_tokenId];
+
+        return string(abi.encodePacked(_baseUri(), tokenCid));
+    }
+
+    /**
+     * @dev Minting functions
      */
 
     function _mint(address _to, string memory _cid) internal virtual {
@@ -49,44 +74,19 @@ contract ERC721 is IERC165, IERC721, IERC721Metadata {
         emit Transfer(address(0), _to, _currentId);
     }
 
-    function currentTokenId() internal virtual returns (uint256) {
+    function _currentTokenId() internal virtual returns (uint256) {
 
         return _currentId;
+    }
+
+    function _baseUri() internal view virtual returns (string memory) {
+
+        return "ipfs://";
     }
 
     function totalSupply() public virtual returns (uint256) {
 
         return _totalSupply;
-    }
-
-    /**
-     * @dev ERC721Metadata functions
-     */
-    
-    constructor(string memory name_, string memory symbol_) {
-        _name = name_;
-        _symbol = symbol_;
-    }
-
-    function name() public view virtual override returns (string memory) {
-
-        return "EscapePlan";
-    }
-
-    function symbol() public view virtual override returns (string memory) {
-
-        return "ESC";
-    }
-
-    function baseURI() internal view virtual returns (string memory) {
-
-        return "ipfs://";
-    }
-
-    function tokenURI(uint256 _tokenId) public view virtual override returns (string memory) {
-        string memory tokenCid = _tokenCid[_tokenId];
-
-        return string(abi.encodePacked(baseURI(), tokenCid));
     }
 
     /**
