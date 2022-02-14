@@ -85,55 +85,47 @@ const { ethers } = require("hardhat");
      * @dev MyERC721Token function tests
      */
 
-    // Token balance should equal 0
+    // Token balance for addr1 should equal 0
     expect(await MyERC721Token.balanceOf(addr1.address)).equal(0)
 
-    // Mints first token without royalty
-    await MyERC721Token.publicMint(addr1.address, "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
+    // Adds addr2 to whitelist
+    await MyERC721Token.addToWhitelist(addr2.address)
 
-    // Token balance should equal 1
-    expect(await MyERC721Token.balanceOf(addr1.address)).equal(1)
+    // Mint with addr2 during whitelist pre-mint
+    await MyERC721Token.mint(addr2.address, 20)
 
-    // Token URI should return correct identifier
-    expect(await MyERC721Token.tokenURI(1)).equal("ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
+    // Token balance for addr2 should equal 1
+    expect(await MyERC721Token.balanceOf(addr2.address)).equal(1)
 
-    // Royalty for 5 ETH should be 0 ETH for tokenId #1
-    expect(await MyERC721Token.royaltyInfo(1, ethers.utils.parseEther("5"))).eql([addr1.address, ethers.utils.parseEther("0")])
-
-    // Mints second token with royalty
-    await MyERC721Token.publicMintWithRoyalty(addr1.address, "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi", 10)
-
-    // Token balance should equal 2
-    expect(await MyERC721Token.balanceOf(addr1.address)).equal(2)
+    // Token owner of ID 1 should be addr2
+    expect(await MyERC721Token.ownerOf(1)).equal(addr2.address)
 
     // Token URI should return correct identifier
-    expect(await MyERC721Token.tokenURI(2)).equal("ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
-  
-    // Royalty for 5 ETH should be 0.5 ETH for tokenId #2
-    expect(await MyERC721Token.royaltyInfo(2, ethers.utils.parseEther("5"))).eql([addr1.address, ethers.utils.parseEther("0.5")])
+    expect(await MyERC721Token.tokenURI(1)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1")
 
-    // Owner of tokenId #2 should be addr1
-    expect(await MyERC721Token.ownerOf(2)).equal(addr1.address)
+    // Initiate public mint
+    await MyERC721Token.initiatePublicMint()
 
-    await MyERC721Token.connect(addr1).transferFrom(addr1.address, addr2.address, 2)
+    // Mint with addr3
+    await MyERC721Token.mint(addr3.address, 20)
 
-    // Owner of tokenId #1 should be addr2
-    expect(await MyERC721Token.ownerOf(2)).equal(addr2.address)
+    // Token balance for addr3 should equal 1
+    expect(await MyERC721Token.balanceOf(addr3.address)).equal(1)
 
-    // Token balance should equal 0
-    expect(await MyERC721Token.balanceOf(addr3.address)).equal(0)
-
-    // Add account to whitelist
-    await MyERC721Token.addToWhitelist(addr3.address)
-
-    // Whitelist mint
-    await MyERC721Token.connect(addr2).whitelistMint(addr3.address, "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
-
-    // Token balance should equal 1
-    expect(await MyERC721Token.balanceOf(addr1.address)).equal(1)
+    // Token owner of ID 2 should be addr3
+    expect(await MyERC721Token.ownerOf(2)).equal(addr3.address)
 
     // Token URI should return correct identifier
-    expect(await MyERC721Token.tokenURI(2)).equal("ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi")
+    expect(await MyERC721Token.tokenURI(2)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/2")
+    
+    // Transfer token ID 1 from addr2 to addr3
+    await MyERC721Token.connect(addr2).transferFrom(addr2.address, addr3.address, 1)
+
+    // Token owner of ID 1 should be addr2
+    expect(await MyERC721Token.ownerOf(1)).equal(addr3.address)
+
+    // Token balance for addr3 should equal 2
+    expect(await MyERC721Token.balanceOf(addr3.address)).equal(2)
   });
 });
 
