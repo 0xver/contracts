@@ -17,6 +17,13 @@ import "./security/ReentrancyGuard.sol";
  */
 contract MyERC721Token is ERC721Royalty, Ownable, ReentrancyGuard {
     /**
+     * @dev Handles ETH received by contract
+     */
+
+    receive() external payable {}
+    fallback() external payable {}
+
+    /**
      * @dev Events
      */
 

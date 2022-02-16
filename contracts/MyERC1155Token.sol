@@ -17,6 +17,13 @@ import "./security/ReentrancyGuard.sol";
  */
 contract MyERC1155Token is ERC1155, Ownable, ReentrancyGuard {
     /**
+     * @dev Handles ETH received by contract
+     */
+
+    receive() external payable {}
+    fallback() external payable {}
+
+    /**
      * @dev Events
      */
 

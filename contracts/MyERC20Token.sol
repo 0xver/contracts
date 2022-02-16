@@ -17,6 +17,13 @@ import "./security/ReentrancyGuard.sol";
  */
 contract MyERC20Token is ERC20, Ownable, ReentrancyGuard {
     /**
+     * @dev Handles ETH received by contract
+     */
+
+    receive() external payable {}
+    fallback() external payable {}
+
+    /**
      * @dev Events
      */
 
