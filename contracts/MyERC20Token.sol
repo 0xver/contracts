@@ -50,7 +50,7 @@ contract MyERC20Token is ERC20, Ownable, ReentrancyGuard {
      * @dev Token staking function
      */
 
-    function stake(uint256 _value) public gate() {
+    function stake(uint256 _value) public gate {
         require(balanceOf(msg.sender) > 0, "MyFungibleToken: zero token balance");
 
         _timestamp[msg.sender] = block.timestamp;
@@ -65,7 +65,7 @@ contract MyERC20Token is ERC20, Ownable, ReentrancyGuard {
      * @dev Token claim function
      */
 
-    function claim() public gate() {
+    function claim() public gate {
         require(_staked[msg.sender] > 0, "MyFungibleToken: no tokens staked");
         require(_timestamp[msg.sender] + 30 days <= block.timestamp, "MyFungibleToken: lock time has not completed");
 
