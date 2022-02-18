@@ -2,14 +2,12 @@
 
 pragma solidity ^0.8.0;
 
-import "../IERC721.sol";
-
 /**
  * @title ERC721Metadata Interface
  *
  * @dev Interface of the ERC721Metadata according to the EIP
  */
-interface IERC721Metadata is IERC721 {
+interface IERC721Metadata {
     /**
      * @dev ERC721 token metadata functions
      */
