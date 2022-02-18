@@ -8,14 +8,14 @@ pragma solidity ^0.8.0;
 
 import "./erc/173/ERC173.sol";
 import "./erc/20/ERC20.sol";
-import "./security/ReentrancyGuard.sol";
+import "./security/Guardian.sol";
 
 /**
  * @title My ERC20 Token
  *
  * @dev Extends ERC20 fungible token standard
  */
-contract MyERC20Token is ERC20, ERC173, ReentrancyGuard {
+contract MyERC20Token is ERC20, ERC173, Guardian {
     /**
      * @dev Handles ETH received by contract
      */

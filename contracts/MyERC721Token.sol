@@ -10,14 +10,14 @@ import "./erc/165/IERC165.sol";
 import "./erc/173/ERC173.sol";
 import "./erc/721/ERC721.sol";
 import "./erc/2981/ERC2981.sol";
-import "./security/ReentrancyGuard.sol";
+import "./security/Guardian.sol";
 
 /**
  * @title My ERC721 Token
  *
  * @dev Extends ERC721 non-fungible token standard
  */
-contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, ReentrancyGuard {
+contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, Guardian {
     /**
      * @dev Handles ETH received by contract
      */
@@ -111,6 +111,7 @@ contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, ReentrancyGuard {
     function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165) returns (bool) {
         return
             interfaceId == type(IERC165).interfaceId ||
+            interfaceId == type(IERC173).interfaceId ||
             interfaceId == type(IERC721).interfaceId ||
             interfaceId == type(IERC721Metadata).interfaceId ||
             interfaceId == type(IERC721Receiver).interfaceId ||

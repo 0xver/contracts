@@ -3,13 +3,13 @@
 pragma solidity ^0.8.0;
 
 /**
- * @title ReentrancyGuard Contract
+ * @title Guardian Contract
  *
  * @dev Prevents reentrancy attack from occuring
  */
-abstract contract ReentrancyGuard {
+contract Guardian {
     /**
-     * @dev ReentrancyGuard definitions
+     * @dev Guardian definitions
      */
 
     bool private constant unlocked = true;
@@ -30,7 +30,7 @@ abstract contract ReentrancyGuard {
      */
 
     modifier gate() {
-        require(_status != locked, "ReentrancyGuard: reentrancy denied");
+        require(_status != locked, "Guardian: reentrancy denied");
 
         _status = locked;
         _;

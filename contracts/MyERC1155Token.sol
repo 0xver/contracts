@@ -9,14 +9,14 @@ pragma solidity ^0.8.0;
 import "./erc/165/IERC165.sol";
 import "./erc/173/ERC173.sol";
 import "./erc/1155/ERC1155.sol";
-import "./security/ReentrancyGuard.sol";
+import "./security/Guardian.sol";
 
 /**
  * @title My ERC1155 Token
  *
  * @dev Extends ERC1155 non-fungible token standard
  */
-contract MyERC1155Token is ERC1155, ERC173, IERC165, ReentrancyGuard {
+contract MyERC1155Token is ERC1155, ERC173, IERC165, Guardian {
     /**
      * @dev Handles ETH received by contract
      */
@@ -92,6 +92,7 @@ contract MyERC1155Token is ERC1155, ERC173, IERC165, ReentrancyGuard {
     function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165) returns (bool) {
         return
             interfaceId == type(IERC165).interfaceId ||
+            interfaceId == type(IERC173).interfaceId ||
             interfaceId == type(IERC1155).interfaceId ||
             interfaceId == type(IERC1155Metadata).interfaceId ||
             interfaceId == type(IERC1155Receiver).interfaceId;
