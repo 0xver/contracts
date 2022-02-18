@@ -6,8 +6,10 @@ pragma solidity ^0.8.0;
  * @dev Imports contracts from the library
  */
 
-import "./access/Ownable.sol";
-import "./erc/721/royalty/ERC721Royalty.sol";
+import "./erc/165/IERC165.sol";
+import "./erc/173/ERC173.sol";
+import "./erc/721/ERC721.sol";
+import "./erc/2981/ERC2981.sol";
 import "./security/ReentrancyGuard.sol";
 
 /**
@@ -15,7 +17,7 @@ import "./security/ReentrancyGuard.sol";
  *
  * @dev Extends ERC721 non-fungible token standard
  */
-contract MyERC721Token is ERC721Royalty, Ownable, ReentrancyGuard {
+contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, ReentrancyGuard {
     /**
      * @dev Handles ETH received by contract
      */
@@ -38,10 +40,10 @@ contract MyERC721Token is ERC721Royalty, Ownable, ReentrancyGuard {
     bool private _publicMintStatus = false;
 
     /**
-     * @dev Sets ERC721 constructor values
+     * @dev Sets ERC721 and ERC173 constructor values
      */
 
-    constructor() ERC721("My ERC721 Token", "TKN") Ownable(msg.sender) {
+    constructor() ERC721("My ERC721 Token", "TKN") ERC173(msg.sender) {
         // Bored Ape Yacht Club used as an example
         _setExtendedBaseUri("QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/");
     }
@@ -61,7 +63,7 @@ contract MyERC721Token is ERC721Royalty, Ownable, ReentrancyGuard {
      * @dev Adds account to whitelist
      */
 
-    function addToWhitelist(address _account) public onlyOwner {
+    function addToWhitelist(address _account) public ownership {
         require(_whitelist[_account] != 1, "MyERC721Token: account already in whitelist");
 
         _whitelist[_account] = 1;
@@ -71,7 +73,7 @@ contract MyERC721Token is ERC721Royalty, Ownable, ReentrancyGuard {
      * @dev Initiate public mint
      */
 
-    function initiatePublicMint() public onlyOwner {
+    function initiatePublicMint() public ownership {
         _publicMintStatus = true;
     }
 
@@ -95,10 +97,23 @@ contract MyERC721Token is ERC721Royalty, Ownable, ReentrancyGuard {
      * @dev Withdraw ether from contract
      */
 
-    function withdraw(address _account) public onlyOwner {
+    function withdraw(address _account) public ownership {
         (bool success, ) = payable(_account).call{value: address(this).balance}("");
         require(success, "MyERC721Token: ether transfer failed");
 
         emit Withdrawal(msg.sender, _account, address(this).balance);
+    }
+
+    /**
+     * @dev ERC165 function
+     */
+
+    function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165) returns (bool) {
+        return
+            interfaceId == type(IERC165).interfaceId ||
+            interfaceId == type(IERC721).interfaceId ||
+            interfaceId == type(IERC721Metadata).interfaceId ||
+            interfaceId == type(IERC721Receiver).interfaceId ||
+            interfaceId == type(IERC2981).interfaceId;
     }
 }

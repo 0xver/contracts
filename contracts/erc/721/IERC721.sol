@@ -2,14 +2,12 @@
 
 pragma solidity ^0.8.0;
 
-import "../165/IERC165.sol";
-
 /**
  * @title ERC721 Interface
  *
  * @dev Interface of the ERC721 standard according to the EIP
  */
-interface IERC721 is IERC165 {
+interface IERC721 {
     /**
      * @dev ERC721 standard events
      */

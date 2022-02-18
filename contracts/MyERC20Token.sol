@@ -6,7 +6,7 @@ pragma solidity ^0.8.0;
  * @dev Imports contracts from the library
  */
 
-import "./access/Ownable.sol";
+import "./erc/173/ERC173.sol";
 import "./erc/20/ERC20.sol";
 import "./security/ReentrancyGuard.sol";
 
@@ -15,7 +15,7 @@ import "./security/ReentrancyGuard.sol";
  *
  * @dev Extends ERC20 fungible token standard
  */
-contract MyERC20Token is ERC20, Ownable, ReentrancyGuard {
+contract MyERC20Token is ERC20, ERC173, ReentrancyGuard {
     /**
      * @dev Handles ETH received by contract
      */
@@ -42,7 +42,7 @@ contract MyERC20Token is ERC20, Ownable, ReentrancyGuard {
      * @dev Sets ERC20 constructor values and mints total token supply to deployer
      */
 
-    constructor() ERC20("My ERC20 Token", "TKN") Ownable(msg.sender) {
+    constructor() ERC20("My ERC20 Token", "TKN") ERC173(msg.sender) {
         _mint(msg.sender, 1000000000 * 10 ** decimals());
     }
 
@@ -85,7 +85,7 @@ contract MyERC20Token is ERC20, Ownable, ReentrancyGuard {
      * @dev Withdraw ether from contract
      */
 
-    function withdraw(address _to) public onlyOwner {
+    function withdraw(address _to) public ownership {
         (bool success, ) = payable(_to).call{value: address(this).balance}("");
         require(success, "MyContract: ether transfer failed");
 

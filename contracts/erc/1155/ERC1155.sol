@@ -2,7 +2,6 @@
 
 pragma solidity ^0.8.0;
 
-import "../165/IERC165.sol";
 import "./IERC1155.sol";
 import "./extensions/IERC1155Metadata.sol";
 import "./receiver/IERC1155Receiver.sol";
@@ -12,7 +11,7 @@ import "./receiver/IERC1155Receiver.sol";
  *
  * @dev Implementation of the ERC1155 standard
  */
-contract ERC1155 is IERC165, IERC1155, IERC1155Metadata {
+contract ERC1155 is IERC1155, IERC1155Metadata {
     /**
      * @dev ERC1155 definitions
      */
@@ -98,18 +97,6 @@ contract ERC1155 is IERC165, IERC1155, IERC1155Metadata {
         string memory tokenCid = _tokenCid[_id];
 
         return string(abi.encodePacked(_baseUri(), tokenCid));
-    }
-
-    /**
-     * @dev ERC165 function
-     */
-
-    function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165) returns (bool) {
-        return
-            interfaceId == type(IERC165).interfaceId ||
-            interfaceId == type(IERC1155).interfaceId ||
-            interfaceId == type(IERC1155Metadata).interfaceId ||
-            interfaceId == type(IERC1155Receiver).interfaceId;
     }
 
     /**

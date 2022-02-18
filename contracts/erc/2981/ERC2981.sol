@@ -2,7 +2,6 @@
 
 pragma solidity ^0.8.0;
 
-import "../165/ERC165.sol";
 import "./IERC2981.sol";
 
 /**
@@ -10,7 +9,7 @@ import "./IERC2981.sol";
  *
  * @dev Implementation of the ERC2981 standard
  */
-abstract contract ERC2981 is ERC165, IERC2981 {
+contract ERC2981 is IERC2981 {
     struct RoyaltyInfo {
         address receiver;
         uint256 percent;
@@ -44,13 +43,5 @@ abstract contract ERC2981 is ERC165, IERC2981 {
         require(_receiver != address(0), "ERC2981: royalty to the zero address");
 
         _royalty[_tokenId] = RoyaltyInfo(_receiver, _percent);
-    }
-
-    /**
-     * @dev ERC165 support function
-     */
-
-    function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165, ERC165) returns (bool) {
-        return interfaceId == type(IERC2981).interfaceId || super.supportsInterface(interfaceId);
     }
 }

@@ -13,7 +13,7 @@ import "../../utility/String.sol";
  *
  * @dev Implementation of the ERC721 standard
  */
-contract ERC721 is IERC165, IERC721, IERC721Metadata, String {
+contract ERC721 is IERC721, IERC721Metadata, String {
     /**
      * @dev ERC721 definitions
      */
@@ -91,18 +91,6 @@ contract ERC721 is IERC165, IERC721, IERC721Metadata, String {
     function totalSupply() public virtual returns (uint256) {
 
         return _totalSupply;
-    }
-
-    /**
-     * @dev ERC165 function
-     */
-
-    function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165) returns (bool) {
-        return
-            interfaceId == type(IERC165).interfaceId ||
-            interfaceId == type(IERC721).interfaceId ||
-            interfaceId == type(IERC721Metadata).interfaceId ||
-            interfaceId == type(IERC721Receiver).interfaceId;
     }
 
     /**

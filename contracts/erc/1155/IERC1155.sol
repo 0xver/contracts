@@ -2,12 +2,10 @@
 
 pragma solidity ^0.8.0;
 
-import "../165/IERC165.sol";
-
 /**
  * @dev Interface of the ERC1155 standard as defined in the EIP
  */
-interface IERC1155 is IERC165 {
+interface IERC1155 {
     /**
      * @dev ERC1155 standard events
      */

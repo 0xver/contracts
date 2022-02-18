@@ -11,5 +11,6 @@ interface IERC165 {
     /**
      * @dev ERC165 standard functions
      */
+
     function supportsInterface(bytes4 interfaceId) external view returns (bool);
 }
