@@ -220,10 +220,10 @@ const { ethers } = require("hardhat");
 });
 
 /**
- * @dev Checks for ERC165 support for MyERC721Token
+ * @dev Checks supports interface for MyERC721Token
  */
  describe("", function () {
-  it("ERC165 support for MyERC721Token", async function () {
+  it("Supports interface for MyERC721Token", async function () {
     /**
      * @dev Contract deployments
      */
@@ -234,111 +234,34 @@ const { ethers } = require("hardhat");
     const MyERC721Token = await Token.deploy();
 
     /**
-     * @dev Check for ERC165 support
+     * @dev Check for supports interface
      */
 
-    // Should return true
-    expect(await MyERC721Token.supportsInterface(ethers.utils . hexlify(0x01ffc9a7))).equal(true)
+    // ERC165 support should return true
+    expect(await MyERC721Token.supportsInterface(ethers.utils.hexlify(0x01ffc9a7))).equal(true)
+
+    // ERC173 support should return true
+    expect(await MyERC721Token.supportsInterface(ethers.utils.hexlify(0x7f5828d0))).equal(true)
+
+    // ERC721 support should return true
+    expect(await MyERC721Token.supportsInterface(ethers.utils.hexlify(0x80ac58cd))).equal(true)
+
+    // ERC721Metadata support should return true
+    expect(await MyERC721Token.supportsInterface(ethers.utils.hexlify(0x5b5e139f))).equal(true)
+
+    // ERC721Receiver support should return true
+    expect(await MyERC721Token.supportsInterface(ethers.utils.hexlify(0x150b7a02))).equal(true)
+
+    // ERC2981 support should return true
+    expect(await MyERC721Token.supportsInterface(ethers.utils.hexlify(0x2a55205a))).equal(true)
   });
 });
 
 /**
- * @dev Checks for ERC721 support for MyERC721Token
- */
-describe("", function () {
-  it("ERC721 support for MyERC721Token", async function () {
-    /**
-     * @dev Contract deployments
-     */
-
-    // Deploys tokens
-    var Token
-    Token = await ethers.getContractFactory("MyERC721Token");
-    const MyERC721Token = await Token.deploy();
-
-    /**
-     * @dev Check for ERC721 support
-     */
-
-    // Should return true
-    expect(await MyERC721Token.supportsInterface(ethers.utils . hexlify(0x80ac58cd))).equal(true)
-  });
-});
-
-/**
- * @dev Checks for ERC721Metadata support for MyERC721Token
- */
-describe("", function () {
-  it("ERC721Metadata support for MyERC721Token", async function () {
-    /**
-     * @dev Contract deployments
-     */
-
-    // Deploys tokens
-    var Token
-    Token = await ethers.getContractFactory("MyERC721Token");
-    const MyERC721Token = await Token.deploy();
-
-    /**
-     * @dev Check for ERC721Metadata support
-     */
-
-    // Should return true
-    expect(await MyERC721Token.supportsInterface(ethers.utils . hexlify(0x5b5e139f))).equal(true)
-  });
-});
-
-/**
- * @dev Checks for ERC721Receiver support for MyERC721Token
- */
-describe("", function () {
-  it("ERC721Receiver support for MyERC721Token", async function () {
-    /**
-     * @dev Contract deployments
-     */
-
-    // Deploys tokens
-    var Token
-    Token = await ethers.getContractFactory("MyERC721Token");
-    const MyERC721Token = await Token.deploy();
-
-    /**
-     * @dev Check for ERC721Receiver support
-     */
-
-    // Should return true
-    expect(await MyERC721Token.supportsInterface(ethers.utils . hexlify(0x150b7a02))).equal(true)
-  });
-});
-
-/**
- * @dev Checks for ERC2981 support for MyERC721Token
- */
-describe("", function () {
-  it("ERC2981 support for MyERC721Token", async function () {
-    /**
-     * @dev Contract deployments
-     */
-
-    // Deploys tokens
-    var Token
-    Token = await ethers.getContractFactory("MyERC721Token");
-    const MyERC721Token = await Token.deploy();
-
-    /**
-     * @dev Check for ERC2981 support
-     */
-
-    // Should return true
-    expect(await MyERC721Token.supportsInterface(ethers.utils . hexlify(0x2a55205a))).equal(true)
-  });
-});
-
-/**
- * @dev Checks for ERC165 support for MyERC1155Token
+ * @dev Checks supports interface for MyERC1155Token
  */
  describe("", function () {
-  it("ERC165 support for MyERC1155Token", async function () {
+  it("Supports interface for MyERC1155Token", async function () {
     /**
      * @dev Contract deployments
      */
@@ -349,79 +272,22 @@ describe("", function () {
     const MyERC1155Token = await Token.deploy();
 
     /**
-     * @dev Check for ERC165 support
+     * @dev Check for supports interface
      */
 
-    // Should return true
-    expect(await MyERC1155Token.supportsInterface(ethers.utils . hexlify(0x01ffc9a7))).equal(true)
-  });
-});
+    // ERC165 support should return true
+    expect(await MyERC1155Token.supportsInterface(ethers.utils.hexlify(0x01ffc9a7))).equal(true)
 
-/**
- * @dev Checks for ERC1155 support for MyERC1155Token
- */
- describe("", function () {
-  it("ERC1155 support for MyERC1155Token", async function () {
-    /**
-     * @dev Contract deployments
-     */
+    // ERC173 support should return true
+    expect(await MyERC1155Token.supportsInterface(ethers.utils.hexlify(0x7f5828d0))).equal(true)
 
-    // Deploys tokens
-    var Token
-    Token = await ethers.getContractFactory("MyERC1155Token");
-    const MyERC1155Token = await Token.deploy();
+    // ERC1155 support should return true
+    expect(await MyERC1155Token.supportsInterface(ethers.utils.hexlify(0xd9b67a26))).equal(true)
 
-    /**
-     * @dev Check for ERC1155 support
-     */
+    // ERC1155Metadata support should return true
+    expect(await MyERC1155Token.supportsInterface(ethers.utils.hexlify(0x0e89341c))).equal(true)
 
-    // Should return true
-    expect(await MyERC1155Token.supportsInterface(ethers.utils . hexlify(0xd9b67a26))).equal(true)
-  });
-});
-
-/**
- * @dev Checks for ERC1155Metadata support for MyERC1155Token
- */
- describe("", function () {
-  it("ERC1155Metadata support for MyERC1155Token", async function () {
-    /**
-     * @dev Contract deployments
-     */
-
-    // Deploys tokens
-    var Token
-    Token = await ethers.getContractFactory("MyERC1155Token");
-    const MyERC1155Token = await Token.deploy();
-
-    /**
-     * @dev Check for ERC1155Metadata support
-     */
-
-    // Should return true
-    expect(await MyERC1155Token.supportsInterface(ethers.utils . hexlify(0x0e89341c))).equal(true)
-  });
-});
-
-/**
- * @dev Checks for ERC1155Receiver support for MyERC1155Token
- */
- describe("", function () {
-  it("ERC1155Receiver support for MyERC1155Token", async function () {
-    /**
-     * @dev Contract deployments
-     */
-
-    // Deploys tokens
-    var Token
-    Token = await ethers.getContractFactory("MyERC1155Token");
-    const MyERC1155Token = await Token.deploy();
-
-    /**
-     * @dev Check for ERC1155Receiver support
-     */
-
-    // Should return true
-    expect(await MyERC1155Token.supportsInterface(ethers.utils . hexlify(0x4e2312e0))).equal(true)
+    // ERC1155Receiver support should return true
+    expect(await MyERC1155Token.supportsInterface(ethers.utils.hexlify(0x4e2312e0))).equal(true)
   });
 });
