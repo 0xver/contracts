@@ -61,6 +61,8 @@ contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, Guardian {
 
     /**
      * @dev Adds account to whitelist
+     *
+     * Use Merckle tree instead to avoid gas costs and adjust other functions accordingly
      */
 
     function addToWhitelist(address _account) public ownership {
