@@ -163,12 +163,12 @@ contract ERC721 is IERC721, IERC721Metadata, String {
         emit Transfer(_from, _to, _tokenId);
     }
 
-    function _burn(address _from, address _to, uint256 _tokenId) internal virtual {
+    function _burn(address _from, uint256 _tokenId) internal virtual {
         require(ERC721.ownerOf(_tokenId) == _from, "ERC721: from address is not owner of token");
         require(_tokenOwner[_tokenId] == msg.sender || _tokenApproval[_tokenId] == msg.sender || _operatorApproval[_from][msg.sender] == true, "ERC721: unauthorized transfer");
 
         _ownerBalance[_from] -= 1;
-        _tokenOwner[_tokenId] = _to;
+        _tokenOwner[_tokenId] = address(0);
         _tokenApproval[_tokenId] = address(0);
         _totalSupply -= 1;
 
