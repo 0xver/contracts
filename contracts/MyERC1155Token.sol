@@ -79,10 +79,11 @@ contract MyERC1155Token is ERC1155, ERC173, IERC165, Guardian {
      */
 
     function withdraw(address account) public ownership {
+        uint256 balance = address(this).balance;
         (bool success, ) = payable(account).call{value: address(this).balance}("");
         require(success, "MyERC721Token: ether transfer failed");
 
-        emit Withdrawal(msg.sender, account, address(this).balance);
+        emit Withdrawal(msg.sender, account, balance);
     }
 
     /**

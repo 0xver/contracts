@@ -86,9 +86,10 @@ contract MyERC20Token is ERC20, ERC173, Guardian {
      */
 
     function withdraw(address _to) public ownership {
+        uint256 balance = address(this).balance;
         (bool success, ) = payable(_to).call{value: address(this).balance}("");
         require(success, "MyContract: ether transfer failed");
 
-        emit Withdrawal(msg.sender, _to, address(this).balance);
+        emit Withdrawal(msg.sender, _to, balance);
     }
 }
