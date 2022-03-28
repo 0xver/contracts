@@ -73,7 +73,7 @@ contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, Guardian {
      * @dev Checks if account is whitelisted
      */
 
-    function whitelisted(address _account) public view returns(bool) {
+    function whitelisted(address _account) public view returns (bool) {
         return _whitelist[_account];
     }
 
