@@ -36,8 +36,8 @@ contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, Guardian {
      * @dev MyERC721Token definitions
      */
 
-    mapping(address => uint256) private _whitelist;
-    bool private _publicMintStatus = false;
+    mapping(address => bool) private _whitelist;
+    bool private _pauseMint = true;
 
     /**
      * @dev Sets ERC721 and ERC173 constructor values
@@ -45,7 +45,7 @@ contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, Guardian {
 
     constructor() ERC721("My ERC721 Token", "TKN") ERC173(msg.sender) {
         // Bored Ape Yacht Club used as an example
-        _setExtendedBaseUri("QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/");
+        _setExtendedBaseUri("QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq");
     }
 
     /**
@@ -65,18 +65,26 @@ contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, Guardian {
      * Use Merckle tree instead to avoid gas costs and adjust other functions accordingly
      */
 
-    function addToWhitelist(address _account) public ownership {
-        require(_whitelist[_account] != 1, "MyERC721Token: account already in whitelist");
+    function addToWhitelist(address[] memory _accounts) public ownership {
+        for (uint i = 0; i < _accounts.length; i++) {
+            _whitelist[_accounts[i]] = true;
+        }
+    }
 
-        _whitelist[_account] = 1;
+    /**
+     * @dev Checks if account is whitelisted
+     */
+
+    function whitelisted(address _account) public view returns(bool) {
+        return _whitelist[_account];
     }
 
     /**
      * @dev Initiate public mint
      */
 
-    function initiatePublicMint() public ownership {
-        _publicMintStatus = true;
+    function pauseMint(bool _status) public ownership {
+        _pauseMint = _status;
     }
 
     /**
@@ -84,10 +92,10 @@ contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, Guardian {
      */
 
     function mint(address _account, uint256 _percent) public gate {
-        if (_publicMintStatus == false) {
-            require(_whitelist[_account] != 0, "MyERC721Token: account not in whitelist");
+        if (_pauseMint == false) {
+            require(_whitelist[_account] == true, "MyERC721Token: account not on whitelist");
 
-            _whitelist[_account] = 0;
+            _whitelist[_account] = false;
 
             _routeMint(_account, _percent);
         } else {
