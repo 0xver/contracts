@@ -107,8 +107,18 @@ const { ethers } = require("hardhat");
     // Token balance for addr1 should equal 0
     expect(await MyERC721Token.balanceOf(addr1.address)).equal(0)
 
+    // No addresses should be whitelisted
+    expect(await MyERC721Token.whitelisted(addr1.address)).equal(false)
+    expect(await MyERC721Token.whitelisted(addr2.address)).equal(false)
+    expect(await MyERC721Token.whitelisted(addr3.address)).equal(false)
+
     // Adds addr2 to whitelist
     await MyERC721Token.addToWhitelist([addr2.address, addr3.address])
+
+    // Whitelisted addresses should be true
+    expect(await MyERC721Token.whitelisted(addr1.address)).equal(false)
+    expect(await MyERC721Token.whitelisted(addr2.address)).equal(true)
+    expect(await MyERC721Token.whitelisted(addr3.address)).equal(true)
 
     // Initiate public mint
     await MyERC721Token.pauseMint(false)
