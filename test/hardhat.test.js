@@ -108,7 +108,7 @@ const { ethers } = require("hardhat");
     expect(await MyERC721Token.balanceOf(addr1.address)).equal(0)
 
     // Adds addr2 to whitelist
-    await MyERC721Token.addToWhitelist(addr2.address)
+    await MyERC721Token.addToWhitelist([addr2.address, addr3.address])
 
     // Mint with addr2 during whitelist pre-mint
     await MyERC721Token.mint(addr2.address, 20)
@@ -123,7 +123,7 @@ const { ethers } = require("hardhat");
     expect(await MyERC721Token.tokenURI(1)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1")
 
     // Initiate public mint
-    await MyERC721Token.initiatePublicMint()
+    await MyERC721Token.pauseMint(false)
 
     // Mint with addr3
     await MyERC721Token.mint(addr3.address, 20)
