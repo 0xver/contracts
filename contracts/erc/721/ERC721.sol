@@ -52,7 +52,7 @@ contract ERC721 is IERC721, IERC721Metadata, String {
 
     function tokenURI(uint256 _tokenId) public view virtual override returns (string memory) {
 
-        return string(abi.encodePacked(_baseUri(), _extendedBaseUri, toString(_tokenId)));
+        return string(abi.encodePacked(_baseUri(), _extendedBaseUri, "/", toString(_tokenId)));
     }
 
     /**
