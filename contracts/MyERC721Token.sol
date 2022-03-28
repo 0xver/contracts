@@ -60,9 +60,7 @@ contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, Guardian {
     }
 
     /**
-     * @dev Adds account to whitelist
-     *
-     * Use Merckle tree instead to avoid gas costs and adjust other functions accordingly
+     * @dev Adds accounts to whitelist
      */
 
     function addToWhitelist(address[] memory _accounts) public ownership {
@@ -91,14 +89,11 @@ contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, Guardian {
      * @dev Mint function with pre-mint for whitelist
      */
 
-    function mint(address _account, uint256 _percent) public gate {
-        if (_pauseMint == false) {
-            require(_whitelist[_account] == true, "MyERC721Token: account not on whitelist");
-
-            _whitelist[_account] = false;
-
-            _routeMint(_account, _percent);
-        } else {
+    function mint(address _account, uint256 _percent, uint256 _quantity) public gate {
+        require(_pauseMint == false, "MyERC721Token: minting is paused");
+        require(_whitelist[_account] == true, "MyERC721Token: account not on whitelist");
+        _whitelist[_account] = false;
+        for (uint256 i=0; i < _quantity; i++) {
             _routeMint(_account, _percent);
         }
     }
