@@ -110,11 +110,14 @@ const { ethers } = require("hardhat");
     // Adds addr2 to whitelist
     await MyERC721Token.addToWhitelist([addr2.address, addr3.address])
 
+    // Initiate public mint
+    await MyERC721Token.pauseMint(false)
+
     // Mint with addr2 during whitelist pre-mint
-    await MyERC721Token.mint(addr2.address, 20)
+    await MyERC721Token.mint(addr2.address, 20, 5)
 
     // Token balance for addr2 should equal 1
-    expect(await MyERC721Token.balanceOf(addr2.address)).equal(1)
+    expect(await MyERC721Token.balanceOf(addr2.address)).equal(5)
 
     // Token owner of ID 1 should be addr2
     expect(await MyERC721Token.ownerOf(1)).equal(addr2.address)
@@ -122,17 +125,14 @@ const { ethers } = require("hardhat");
     // Token URI should return correct identifier
     expect(await MyERC721Token.tokenURI(1)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1")
 
-    // Initiate public mint
-    await MyERC721Token.pauseMint(false)
-
     // Mint with addr3
-    await MyERC721Token.mint(addr3.address, 20)
+    await MyERC721Token.mint(addr3.address, 20, 1)
 
     // Token balance for addr3 should equal 1
     expect(await MyERC721Token.balanceOf(addr3.address)).equal(1)
 
     // Token owner of ID 2 should be addr3
-    expect(await MyERC721Token.ownerOf(2)).equal(addr3.address)
+    expect(await MyERC721Token.ownerOf(6)).equal(addr3.address)
 
     // Token URI should return correct identifier
     expect(await MyERC721Token.tokenURI(2)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/2")
