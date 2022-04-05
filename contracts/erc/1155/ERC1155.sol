@@ -39,39 +39,20 @@ contract ERC1155 is IERC1155, IERC1155Metadata {
      * @dev Minting functions
      */
 
-    function _initialMint(address _to, string memory _cid, uint256 _value) internal virtual {
-        _mintNewIdTokens(_to, _cid, _value);
-    }
-
-    function _mint(address _to, uint256 _value) internal virtual {
-        _mintCurrentIdTokens(_to, _currentTokenId(), _value);
-    }
-
-    function _manualMint(address _to, uint256 _id, uint256 _value) internal virtual {
-        _mintCurrentIdTokens(_to, _id, _value);
-    }
-
-    function _mintNewIdTokens(address _to, string memory _cid, uint256 _value) internal virtual {
-        require(_to != address(0), "ERC1155: cannot mint to the zero address");
-        require(_value >= 1, "ERC1155: value must be 1 or greater");
-
+    function _initTokenId(string memory _cid) internal virtual {
         _currentId += 1;
-        _totalSupply[_currentId] += _value;
-        _ownerBalance[_currentId][_to] += _value;
         _tokenCid[_currentId] = _cid;
-
-        emit TransferSingle(msg.sender, address(0), _to, _currentId, _value);
     }
 
-    function _mintCurrentIdTokens(address _to, uint256 _id, uint256 _value) internal virtual {
+    function _mint(address _to, uint256 _id, uint256 _value) internal virtual {
         require(_to != address(0), "ERC1155: cannot mint to the zero address");
-        require(_value >= 1, "ERC1155: value must be 1 or greater");
-        require(_totalSupply[_id] >= 1, "ERC1155: not a valid token");
+        require(_id != 0, "ERC1155: not a valid token");
+        require(_id <= _currentTokenId(), "ERC1155: not a valid token");
 
         _totalSupply[_id] += _value;
         _ownerBalance[_id][_to] += _value;
 
-        emit TransferSingle(msg.sender, address(0), _to, _currentId, _value);
+        emit TransferSingle(msg.sender, address(0), _to, _id, _value);
     }
 
     function _currentTokenId() internal virtual returns (uint256) {
