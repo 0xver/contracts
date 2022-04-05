@@ -120,7 +120,7 @@ contract ERC20 is IERC20 {
     }
 
     function _burn(address _from, uint256 _value) internal virtual {
-        require(_from == address(0), "ERC20: burn must be to the zero address");
+        require(_from != address(0), "ERC20: burn cannot be from zero address");
 
         _balances[_from] -= _value;
         _totalSupply -= _value;
