@@ -29,7 +29,7 @@ contract MyERC20Token is ERC20, ERC173, Guardian {
 
     event Stake(address staker, uint256 value, uint256 time);
     event Claim(address staker, uint256 value);
-    event Withdrawal(address operator, address receiver, uint256 value);
+    event Withdraw(address operator, address receiver, uint256 value);
 
     /**
      * @dev MyFungibleToken definitions
@@ -90,6 +90,6 @@ contract MyERC20Token is ERC20, ERC173, Guardian {
         (bool success, ) = payable(_to).call{value: address(this).balance}("");
         require(success, "MyContract: ether transfer failed");
 
-        emit Withdrawal(msg.sender, _to, balance);
+        emit Withdraw(msg.sender, _to, balance);
     }
 }

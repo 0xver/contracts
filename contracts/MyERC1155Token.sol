@@ -29,7 +29,7 @@ contract MyERC1155Token is ERC1155, ERC173, IERC165, Guardian {
      */
 
     event Mint(address receiver, uint256 tokenId, string cid, uint256 value);
-    event Withdrawal(address operator, address receiver, uint256 value);
+    event Withdraw(address operator, address receiver, uint256 value);
 
     /**
      * @dev MyNonFungibleToken definitions
@@ -83,7 +83,7 @@ contract MyERC1155Token is ERC1155, ERC173, IERC165, Guardian {
         (bool success, ) = payable(account).call{value: address(this).balance}("");
         require(success, "MyERC721Token: ether transfer failed");
 
-        emit Withdrawal(msg.sender, account, balance);
+        emit Withdraw(msg.sender, account, balance);
     }
 
     /**
