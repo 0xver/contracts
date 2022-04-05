@@ -182,8 +182,11 @@ const { ethers } = require("hardhat")
     // Token balance #1 for addr1 should equal 0
     expect(await MyERC1155Token.balanceOf(addr1.address, 1)).equal(0)
 
-    // Initial mint 500 tokens for token ID #1
-    await MyERC1155Token.initialMint(addr1.address, "QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1", 500)
+    // Initiate token ID #1
+    await MyERC1155Token.initTokenId("QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1")
+
+    // Mint 500 tokens
+    await MyERC1155Token.mint(addr1.address, 500)
 
     // Token balance #1 for addr1 should equal 500
     expect(await MyERC1155Token.balanceOf(addr1.address, 1)).equal(500)
@@ -209,8 +212,11 @@ const { ethers } = require("hardhat")
     // Mint more tokens for ID #1 to addr4
     await MyERC1155Token.mint(addr4.address, 600)
 
-    // Initial mint 2500 tokens for token ID #2
-    await MyERC1155Token.initialMint(addr4.address, "QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/2", 2500)
+    // Initiate token ID #2
+    await MyERC1155Token.initTokenId("QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/2")
+
+    // Mint 2500 tokens
+    await MyERC1155Token.mint(addr4.address, 2500)
 
     // Token balance #1 for addr3 should equal 100
     expect(await MyERC1155Token.balanceOf(addr3.address, 1)).equal(100)
