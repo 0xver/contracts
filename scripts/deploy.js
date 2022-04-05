@@ -6,15 +6,20 @@ async function main() {
   // Creates Token variable
   var Token
 
-  // Deploys MyFungibleToken
-  Token = await ethers.getContractFactory("MyFungibleToken");
-  const MyFungibleToken = await Token.deploy();
-  console.log("Deployed MyFungibleToken", (MyFungibleToken.address).toString(), "\n");
+  // Deploys MyERC20Token
+  Token = await ethers.getContractFactory("MyERC20Token");
+  const MyERC20Token = await Token.deploy();
+  console.log("Deployed MyERC20Token", (MyERC20Token.address).toString(), "\n");
 
-  // Deploys MyNonFungibleToken
-  Token = await ethers.getContractFactory("MyNonFungibleToken");
-  const MyNonFungibleToken = await Token.deploy();
-  console.log("Deployed MyNonFungibleToken", (MyNonFungibleToken.address).toString(), "\n");
+  // Deploys MyERC721Token
+  Token = await ethers.getContractFactory("MyERC721Token");
+  const MyERC721Token = await Token.deploy();
+  console.log("Deployed MyERC721Token", (MyERC721Token.address).toString(), "\n");
+
+  // Deploys MyERC1155Token
+  Token = await ethers.getContractFactory("MyERC1155Token");
+  const MyERC1155Token = await Token.deploy();
+  console.log("Deployed MyERC1155Token", (MyERC1155Token.address).toString(), "\n");
 }
 
 main()
