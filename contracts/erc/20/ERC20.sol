@@ -34,32 +34,32 @@ contract ERC20 is IERC20 {
      * @dev ERC20 functions
      */
 
-    function name() public view virtual override returns (string memory) {
+    function name() public view override returns (string memory) {
 
         return _name;
     }
 
-    function symbol() public view virtual override returns (string memory) {
+    function symbol() public view override returns (string memory) {
 
         return _symbol;
     }
 
-    function decimals() public view virtual override returns (uint8) {
+    function decimals() public pure override returns (uint8) {
 
         return 18;
     }
 
-    function totalSupply() public view virtual override returns (uint256) {
+    function totalSupply() public view override returns (uint256) {
 
         return _totalSupply;
     }
 
-    function balanceOf(address _owner) public view virtual override returns (uint256) {
+    function balanceOf(address _owner) public view override returns (uint256) {
 
         return _balances[_owner];
     }
 
-    function transfer(address _to, uint256 _value) public virtual override returns (bool) {
+    function transfer(address _to, uint256 _value) public override returns (bool) {
         require(balanceOf(msg.sender) >= _value, "ERC20: value exceeds balance");
 
         _transfer(msg.sender, _to, _value);
@@ -67,7 +67,7 @@ contract ERC20 is IERC20 {
         return true;
     }
 
-    function transferFrom(address _from, address _to, uint256 _value) public virtual override returns (bool) {
+    function transferFrom(address _from, address _to, uint256 _value) public override returns (bool) {
         require(balanceOf(_from) >= _value, "ERC20: value exceeds balance");
 
         if (msg.sender != _from) {
@@ -81,7 +81,7 @@ contract ERC20 is IERC20 {
         return true;
     }
 
-    function approve(address _spender, uint256 _value) public virtual override returns (bool) {
+    function approve(address _spender, uint256 _value) public override returns (bool) {
         require(_spender != address(0), "ERC20: cannot approve the zero address");
         require(_spender != msg.sender, "ERC20: cannot approve the owner");
 
@@ -92,7 +92,7 @@ contract ERC20 is IERC20 {
         return true;
     }
 
-    function allowance(address _owner, address _spender) public view virtual override returns (uint256) {
+    function allowance(address _owner, address _spender) public view override returns (uint256) {
 
         return _allowances[_owner][_spender];
     }
@@ -101,7 +101,7 @@ contract ERC20 is IERC20 {
      * @dev ERC20 internal functions
      */
 
-    function _transfer(address _from, address _to, uint256 _value) internal virtual {
+    function _transfer(address _from, address _to, uint256 _value) internal {
         require(_to != address(0), "ERC20: transfer to the zero address");
 
         _balances[_from] -= _value;
@@ -110,7 +110,7 @@ contract ERC20 is IERC20 {
         emit Transfer(_from, _to, _value);
     }
 
-    function _mint(address _to, uint256 _value) internal virtual {
+    function _mint(address _to, uint256 _value) internal {
         require(_to != address(0), "ERC20: cannot mint to the zero address");
 
         _totalSupply += _value;
@@ -119,7 +119,7 @@ contract ERC20 is IERC20 {
         emit Transfer(address(0), _to, _value);
     }
 
-    function _burn(address _from, uint256 _value) internal virtual {
+    function _burn(address _from, uint256 _value) internal {
         require(_from != address(0), "ERC20: burn cannot be from zero address");
 
         _balances[_from] -= _value;

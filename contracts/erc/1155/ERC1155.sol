@@ -39,12 +39,12 @@ contract ERC1155 is IERC1155, IERC1155Metadata {
      * @dev Minting functions
      */
 
-    function _initTokenId(string memory _cid) internal virtual {
+    function _initTokenId(string memory _cid) internal {
         _currentId += 1;
         _tokenCid[_currentId] = _cid;
     }
 
-    function _mint(address _to, uint256 _id, uint256 _value) internal virtual {
+    function _mint(address _to, uint256 _id, uint256 _value) internal {
         require(_to != address(0), "ERC1155: cannot mint to the zero address");
         require(_id != 0, "ERC1155: not a valid token");
         require(_id <= _currentTokenId(), "ERC1155: not a valid token");
@@ -55,17 +55,17 @@ contract ERC1155 is IERC1155, IERC1155Metadata {
         emit TransferSingle(msg.sender, address(0), _to, _id, _value);
     }
 
-    function _currentTokenId() internal virtual returns (uint256) {
+    function _currentTokenId() internal view returns (uint256) {
 
         return _currentId;
     }
 
-    function _baseUri() internal view virtual returns (string memory) {
+    function _baseUri() internal pure returns (string memory) {
 
         return "ipfs://";
     }
 
-    function totalSupply(uint256 _id) public virtual returns (uint256) {
+    function totalSupply(uint256 _id) public view returns (uint256) {
 
         return _totalSupply[_id];
     }
@@ -74,7 +74,7 @@ contract ERC1155 is IERC1155, IERC1155Metadata {
      * @dev ERC1155Metadata functions
      */
 
-    function uri(uint256 _id) public view virtual override returns (string memory) {
+    function uri(uint256 _id) public view override returns (string memory) {
         string memory tokenCid = _tokenCid[_id];
 
         return string(abi.encodePacked(_baseUri(), tokenCid));
@@ -84,7 +84,7 @@ contract ERC1155 is IERC1155, IERC1155Metadata {
      * @dev ERC1155 functions
      */
 
-    function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes memory _data) public virtual override {
+    function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes memory _data) public override {
         require(_from == msg.sender || isApprovedForAll(_from, msg.sender), "ERC1155: unauthorized transfer");
         require(_ownerBalance[_id][_from] >= _value, "ERC1155: value exceeds balance");
         require(_to != address(0), "ERC1155: cannot transfer to the zero address");
@@ -97,7 +97,7 @@ contract ERC1155 is IERC1155, IERC1155Metadata {
         _safeTransferCheck(msg.sender, _from, _to, _id, _value, _data);
     }
 
-    function safeBatchTransferFrom(address _from, address _to, uint256[] memory _ids, uint256[] memory _values, bytes memory _data) public virtual override {
+    function safeBatchTransferFrom(address _from, address _to, uint256[] memory _ids, uint256[] memory _values, bytes memory _data) public override {
         require(_from == msg.sender || isApprovedForAll(_from, msg.sender), "ERC1155: unauthorized transfer");
         require(_ids.length == _values.length, "ERC1155: ids and amounts length mismatch");
         require(_to != address(0), "ERC1155: cannot transfer to the zero address");
@@ -116,13 +116,13 @@ contract ERC1155 is IERC1155, IERC1155Metadata {
         _safeBatchTransferCheck(msg.sender, _from, _to, _ids, _values, _data);
     }
     
-    function balanceOf(address _owner, uint256 _id) public view virtual override returns (uint256) {
+    function balanceOf(address _owner, uint256 _id) public view override returns (uint256) {
         require(_owner != address(0), "ERC1155: cannot get balance for the zero address");
 
         return _ownerBalance[_id][_owner];
     }
 
-    function balanceOfBatch(address[] memory _owners, uint256[] memory _ids) public view virtual override returns (uint256[] memory) {
+    function balanceOfBatch(address[] memory _owners, uint256[] memory _ids) public view override returns (uint256[] memory) {
         require(_owners.length == _ids.length, "ERC1155: accounts and ids length mismatch");
 
         uint256[] memory batchBalances = new uint256[](_owners.length);
@@ -134,7 +134,7 @@ contract ERC1155 is IERC1155, IERC1155Metadata {
         return batchBalances;
     }
 
-    function setApprovalForAll(address _operator, bool _approved) public virtual override {
+    function setApprovalForAll(address _operator, bool _approved) public override {
         require(msg.sender != _operator, "ERC1155: cannot set approval for self");
 
         _operatorApproval[msg.sender][_operator] = _approved;
@@ -142,7 +142,7 @@ contract ERC1155 is IERC1155, IERC1155Metadata {
         emit ApprovalForAll(msg.sender, _operator, _approved);
     }
 
-    function isApprovedForAll(address _owner, address _operator) public view virtual override returns (bool) {
+    function isApprovedForAll(address _owner, address _operator) public view override returns (bool) {
 
         return _operatorApproval[_owner][_operator];
     }

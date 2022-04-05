@@ -38,12 +38,12 @@ contract ERC173 is IERC173 {
      * @dev ERC173 functions
      */
 
-    function owner() public view virtual override returns (address) {
+    function owner() public view override returns (address) {
 
         return _owner;
     }
 
-    function transferOwnership(address _newOwner) public virtual override ownership {
+    function transferOwnership(address _newOwner) public override ownership {
         _transferOwnership(_newOwner);
     }
 
@@ -51,7 +51,7 @@ contract ERC173 is IERC173 {
      * @dev ERC173 internal function
      */
     
-    function _transferOwnership(address _newOwner) internal virtual {
+    function _transferOwnership(address _newOwner) internal {
         address previousOwner = _owner;
         _owner = _newOwner;
     

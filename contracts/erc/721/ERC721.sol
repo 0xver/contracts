@@ -40,30 +40,30 @@ contract ERC721 is IERC721, IERC721Metadata, String {
         _symbol = symbol_;
     }
 
-    function name() public view virtual override returns (string memory) {
+    function name() public view override returns (string memory) {
 
         return _name;
     }
 
-    function symbol() public view virtual override returns (string memory) {
+    function symbol() public view override returns (string memory) {
 
         return _symbol;
     }
 
-    function tokenURI(uint256 _tokenId) public view virtual override returns (string memory) {
+    function tokenURI(uint256 _tokenId) public view override returns (string memory) {
 
-        return string(abi.encodePacked(_baseUri(), _extendedBaseUri, "/", toString(_tokenId)));
+        return string(abi.encodePacked(_ipfs(), _extendedBaseUri, "/", toString(_tokenId)));
     }
 
     /**
      * @dev Minting functions
      */
 
-    function _mint(address _to) internal virtual {
+    function _mint(address _to) internal {
         _mintSingleToken(_to);
     }
 
-    function _mintSingleToken(address _to) internal virtual {
+    function _mintSingleToken(address _to) internal {
         require(_to != address(0), "ERC721: cannot mint to the zero address");
 
         _currentId += 1;
@@ -74,21 +74,21 @@ contract ERC721 is IERC721, IERC721Metadata, String {
         emit Transfer(address(0), _to, _currentId);
     }
 
-    function _currentTokenId() internal virtual returns (uint256) {
+    function _currentTokenId() internal view returns (uint256) {
 
         return _currentId;
     }
 
-    function _baseUri() internal view virtual returns (string memory) {
+    function _ipfs() internal pure returns (string memory) {
 
         return "ipfs://";
     }
 
-    function _setExtendedBaseUri(string memory _extension) internal virtual {
+    function _setExtendedBaseUri(string memory _extension) internal {
         _extendedBaseUri = _extension;
     }
 
-    function totalSupply() public virtual returns (uint256) {
+    function totalSupply() public view returns (uint256) {
 
         return _totalSupply;
     }
@@ -97,31 +97,31 @@ contract ERC721 is IERC721, IERC721Metadata, String {
      * @dev ERC721 functions
      */
     
-    function balanceOf(address _owner) public view virtual override returns (uint256) {
+    function balanceOf(address _owner) public view override returns (uint256) {
 
         return _ownerBalance[_owner];
     }
 
-    function ownerOf(uint256 _tokenId) public view virtual override returns (address) {
+    function ownerOf(uint256 _tokenId) public view override returns (address) {
 
         return _tokenOwner[_tokenId];
     }
 
-    function safeTransferFrom(address _from, address _to, uint256 _tokenId) public virtual override {
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId) public override {
         safeTransferFrom(_from, _to, _tokenId, "");
     }
 
-    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes memory _data)  public virtual override {
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes memory _data) public override {
         _transfer(_from, _to, _tokenId);
     
         _onERC721Received(_from, _to, _tokenId, _data);
     }
 
-    function transferFrom(address _from, address _to, uint256 _tokenId) public virtual override {
+    function transferFrom(address _from, address _to, uint256 _tokenId) public override {
         _transfer(_from, _to, _tokenId);
     }
 
-    function approve(address _approved, uint256 _tokenId) public virtual override {
+    function approve(address _approved, uint256 _tokenId) public override {
         require(_tokenOwner[_tokenId] == msg.sender);
 
         _tokenApproval[_tokenId] = _approved;
@@ -129,7 +129,7 @@ contract ERC721 is IERC721, IERC721Metadata, String {
         emit Approval(msg.sender, _approved, _tokenId);
     }
 
-    function setApprovalForAll(address _operator, bool _approved) public virtual override {
+    function setApprovalForAll(address _operator, bool _approved) public override {
         require(msg.sender != _operator, "ERC721: cannot approve the owner");
         _operatorApproval[msg.sender][_operator] = _approved;
     
@@ -141,7 +141,7 @@ contract ERC721 is IERC721, IERC721Metadata, String {
         return _tokenApproval[_tokenId];
     }
 
-    function isApprovedForAll(address _owner, address _operator) public view virtual override returns (bool) {
+    function isApprovedForAll(address _owner, address _operator) public view override returns (bool) {
 
         return _operatorApproval[_owner][_operator];
     }
@@ -150,7 +150,7 @@ contract ERC721 is IERC721, IERC721Metadata, String {
      * @dev ERC721 internal transfer function
      */
 
-    function _transfer(address _from, address _to, uint256 _tokenId) internal virtual {
+    function _transfer(address _from, address _to, uint256 _tokenId) internal {
         require(ERC721.ownerOf(_tokenId) == _from, "ERC721: from address is not owner of token");
         require(_tokenOwner[_tokenId] == msg.sender || _tokenApproval[_tokenId] == msg.sender || _operatorApproval[_from][msg.sender] == true, "ERC721: unauthorized transfer");
         require(_to != address(0), "ERC721: cannot transfer to the zero address");
@@ -163,7 +163,7 @@ contract ERC721 is IERC721, IERC721Metadata, String {
         emit Transfer(_from, _to, _tokenId);
     }
 
-    function _burn(address _from, uint256 _tokenId) internal virtual {
+    function _burn(address _from, uint256 _tokenId) internal {
         require(ERC721.ownerOf(_tokenId) == _from, "ERC721: from address is not owner of token");
         require(_tokenOwner[_tokenId] == msg.sender || _tokenApproval[_tokenId] == msg.sender || _operatorApproval[_from][msg.sender] == true, "ERC721: unauthorized transfer");
 
