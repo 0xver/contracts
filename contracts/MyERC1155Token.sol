@@ -28,7 +28,6 @@ contract MyERC1155Token is ERC1155, ERC173, IERC165, Guardian {
      * @dev Events
      */
 
-    event Mint(address receiver, uint256 tokenId, string cid, uint256 value);
     event Withdraw(address operator, address receiver, uint256 value);
 
     /**
@@ -48,30 +47,16 @@ contract MyERC1155Token is ERC1155, ERC173, IERC165, Guardian {
      * @dev Creates new token ID
      */
 
-    function initialMint(address _to, string memory _cid, uint256 _value) public ownership {
-        _initialMint(_to, _cid, _value);
-
-        emit Mint(_to, _currentTokenId(), _cid, _value);
+    function initTokenId(string memory _cid) public ownership {
+        _initTokenId(_cid);
     }
 
     /**
-     * @dev Mints tokens
+     * @dev Mints the current token ID
      */
 
-    function mint(address _to, uint256 _value) public ownership {
-        _mint(_to, _value);
-
-        emit Mint(_to, _currentTokenId(), uri(_currentTokenId()), _value);
-    }
-
-    /**
-     * @dev Manual mint
-     */
-
-    function manualMint(address _to, uint256 _id, uint256 _value) public ownership {
-        _manualMint(_to, _id, _value);
-
-        emit Mint(_to, _id, uri(_id), _value);
+    function mint(address _to, uint256 _quantity) public {
+        _mint(_to, _currentTokenId(), _quantity);
     }
 
     /**
