@@ -1,5 +1,5 @@
-const { expect } = require("chai");
-const { ethers } = require("hardhat");
+const { expect } = require("chai")
+const { ethers } = require("hardhat")
 
 /**
  * @dev Tests contract deployments
@@ -12,14 +12,14 @@ const { ethers } = require("hardhat");
 
     // Deploys tokens
     var Token
-    Token = await ethers.getContractFactory("MyERC20Token");
-    await Token.deploy();
-    var Token = await ethers.getContractFactory("MyERC721Token");
-    await Token.deploy();
-    var Token = await ethers.getContractFactory("MyERC1155Token");
-    await Token.deploy();
-  });
-});
+    Token = await ethers.getContractFactory("MyERC20Token")
+    await Token.deploy()
+    var Token = await ethers.getContractFactory("MyERC721Token")
+    await Token.deploy()
+    var Token = await ethers.getContractFactory("MyERC1155Token")
+    await Token.deploy()
+  })
+})
 
 /**
  * @dev Tests MyERC20Token functions
@@ -31,12 +31,12 @@ const { ethers } = require("hardhat");
      */
 
     // Gets owner address and second address
-    const [addr1, addr2, addr3] = await ethers.getSigners();
+    const [addr1, addr2, addr3] = await ethers.getSigners()
 
     // Deploys tokens
     var Token
-    Token = await ethers.getContractFactory("MyERC20Token");
-    const MyERC20Token = await Token.deploy();
+    Token = await ethers.getContractFactory("MyERC20Token")
+    const MyERC20Token = await Token.deploy()
 
     /**
      * @dev MyERC20Token function tests
@@ -80,8 +80,8 @@ const { ethers } = require("hardhat");
 
     // Token balance of addr2 should equal total supply of 1 billion tokens
     expect(await MyERC20Token.balanceOf(addr2.address)).equal(ethers.utils.parseEther("1000000000"))
-  });
-});
+  })
+})
 
 /**
  * @dev Tests MyERC721Token functions
@@ -93,12 +93,12 @@ const { ethers } = require("hardhat");
      */
 
     // Gets owner address and second address
-    const [addr1, addr2, addr3] = await ethers.getSigners();
+    const [addr1, addr2, addr3] = await ethers.getSigners()
 
     // Deploys tokens
     var Token
-    Token = await ethers.getContractFactory("MyERC721Token");
-    const MyERC721Token = await Token.deploy();
+    Token = await ethers.getContractFactory("MyERC721Token")
+    const MyERC721Token = await Token.deploy()
 
     /**
      * @dev MyERC721Token function tests
@@ -155,8 +155,8 @@ const { ethers } = require("hardhat");
 
     // Token balance for addr3 should equal 2
     expect(await MyERC721Token.balanceOf(addr3.address)).equal(2)
-  });
-});
+  })
+})
 
 /**
  * @dev Tests MyERC1155Token functions
@@ -168,12 +168,12 @@ const { ethers } = require("hardhat");
      */
 
     // Gets owner address and second address
-    const [addr1, addr2, addr3, addr4] = await ethers.getSigners();
+    const [addr1, addr2, addr3, addr4] = await ethers.getSigners()
 
     // Deploys tokens
     var Token
-    Token = await ethers.getContractFactory("MyERC1155Token");
-    const MyERC1155Token = await Token.deploy();
+    Token = await ethers.getContractFactory("MyERC1155Token")
+    const MyERC1155Token = await Token.deploy()
 
     /**
      * @dev MyERC1155Token function tests
@@ -226,8 +226,8 @@ const { ethers } = require("hardhat");
 
     // Token URI for #2 should be correct identifier
     expect(await MyERC1155Token.uri(2)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/2")
-  });
-});
+  })
+})
 
 /**
  * @dev Checks supports interface for MyERC721Token
@@ -240,8 +240,8 @@ const { ethers } = require("hardhat");
 
     // Deploys tokens
     var Token
-    Token = await ethers.getContractFactory("MyERC721Token");
-    const MyERC721Token = await Token.deploy();
+    Token = await ethers.getContractFactory("MyERC721Token")
+    const MyERC721Token = await Token.deploy()
 
     /**
      * @dev Check for supports interface
@@ -264,8 +264,8 @@ const { ethers } = require("hardhat");
 
     // ERC2981 support should return true
     expect(await MyERC721Token.supportsInterface(ethers.utils.hexlify(0x2a55205a))).equal(true)
-  });
-});
+  })
+})
 
 /**
  * @dev Checks supports interface for MyERC1155Token
@@ -299,5 +299,5 @@ const { ethers } = require("hardhat");
 
     // ERC1155Receiver support should return true
     expect(await MyERC1155Token.supportsInterface(ethers.utils.hexlify(0x4e2312e0))).equal(true)
-  });
-});
+  })
+})
