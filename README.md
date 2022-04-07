@@ -34,15 +34,3 @@ Run the command to test `MyERC20Token.sol`, `MyERC721Token.sol`, or `MyERC1155To
 ```
 npx hardhat test
 ```
-
-### Deploy
-Run the command to deploy `MyERC20Token.sol`, `MyERC721Token.sol`, or `MyERC1155Token.sol` using `scripts/deploy.js`
-```
-npx hardhat run scripts/deploy.js --network <network>
-```
-
-### Verify
-Run the command to verify `MyERC20Token.sol`, `MyERC721Token.sol`, or `MyERC1155Token.sol` on Etherscan
-```
-npx hardhat verify --network <network> <contract-address> "Constructor argument 1"
-```
