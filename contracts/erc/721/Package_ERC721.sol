@@ -6,7 +6,7 @@ import "../165/ERC165.sol";
 import "./ERC721.sol";
 import "./extensions/ERC721Metadata.sol";
 import "./receiver/ERC721Receiver.sol";
-import "../../utility/String.sol";
+import "../../library/String.sol";
 
 /**
  * @title ERC721 Contract
