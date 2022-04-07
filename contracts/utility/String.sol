@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-contract String {
+library String {
     /**
      * @dev Converts integer to string
      */
