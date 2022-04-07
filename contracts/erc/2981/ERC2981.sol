@@ -2,46 +2,15 @@
 
 pragma solidity ^0.8.0;
 
-import "./IERC2981.sol";
-
 /**
- * @title ERC2981 Contract
+ * @title ERC2981 Interface
  *
- * @dev Implementation of the ERC2981 standard
+ * @dev Interface of the ERC2981 standard according to the EIP
  */
-contract ERC2981 is IERC2981 {
-    struct RoyaltyInfo {
-        address receiver;
-        uint256 percent;
-    }
-
-    mapping(uint256 => RoyaltyInfo) internal _royalty;
-
+interface ERC2981 {
     /**
-     * @dev ERC2981 function
+     * @dev ERC2891 standard functions
      */
 
-    function royaltyInfo(uint256 _tokenId, uint256 _salePrice) public view override returns (address, uint256) {
-        RoyaltyInfo memory royalty = _royalty[_tokenId];
-        uint256 royaltyAmount;
-
-        if (royalty.percent == 0) {
-            royaltyAmount = 0;
-        } else {
-            royaltyAmount = (_salePrice * royalty.percent) / 100;
-        }
-
-        return (royalty.receiver, royaltyAmount);
-    }
-
-    /**
-     * @dev ERC2981 internal function
-     */
-
-    function _setTokenRoyalty(uint256 _tokenId, address _receiver, uint256 _percent) internal {
-        require(_percent <= 100, "ERC2981: royalty fee will exceed sale price");
-        require(_receiver != address(0), "ERC2981: royalty to the zero address");
-
-        _royalty[_tokenId] = RoyaltyInfo(_receiver, _percent);
-    }
+    function royaltyInfo(uint256 _tokenId, uint256 _salePrice) external view returns (address receiver, uint256 royaltyAmount);
 }

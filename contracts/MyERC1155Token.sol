@@ -6,17 +6,17 @@ pragma solidity ^0.8.0;
  * @dev Imports contracts from the library
  */
 
-import "./erc/165/IERC165.sol";
-import "./erc/173/ERC173.sol";
-import "./erc/1155/ERC1155.sol";
-import "./security/Guardian.sol";
+import "./erc/165/ERC165.sol";
+import "./erc/173/Package_ERC173.sol";
+import "./erc/1155/Package_ERC1155.sol";
+import "./security/Package_Guardian.sol";
 
 /**
  * @title My ERC1155 Token
  *
  * @dev Extends ERC1155 non-fungible token standard
  */
-contract MyERC1155Token is ERC1155, ERC173, IERC165, Guardian {
+contract MyERC1155Token is Package_ERC1155, Package_ERC173, ERC165, Package_Guardian {
     /**
      * @dev Handles ETH received by contract
      */
@@ -40,7 +40,7 @@ contract MyERC1155Token is ERC1155, ERC173, IERC165, Guardian {
      * @dev Sets ERC1155 constructor values
      */
 
-    constructor() ERC1155("My ERC1155 Token", "TKN") ERC173(msg.sender) {
+    constructor() Package_ERC1155("My ERC1155 Token", "TKN") Package_ERC173(msg.sender) {
     }
 
     /**
@@ -75,12 +75,12 @@ contract MyERC1155Token is ERC1155, ERC173, IERC165, Guardian {
      * @dev ERC165 function
      */
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public pure override(ERC165) returns (bool) {
         return
-            interfaceId == type(IERC165).interfaceId ||
-            interfaceId == type(IERC173).interfaceId ||
-            interfaceId == type(IERC1155).interfaceId ||
-            interfaceId == type(IERC1155Metadata).interfaceId ||
-            interfaceId == type(IERC1155Receiver).interfaceId;
+            interfaceId == type(ERC165).interfaceId ||
+            interfaceId == type(ERC173).interfaceId ||
+            interfaceId == type(ERC1155).interfaceId ||
+            interfaceId == type(ERC1155Metadata).interfaceId ||
+            interfaceId == type(ERC1155Receiver).interfaceId;
     }
 }

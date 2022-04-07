@@ -2,19 +2,15 @@
 
 pragma solidity ^0.8.0;
 
-import "./IERC165.sol";
-
 /**
- * @title ERC165 Contract
+ * @title ERC165 Interface
  *
- * @dev Implementation of the ERC165 standard
+ * @dev Interface of the ERC165 standard
  */
-contract ERC165 is IERC165 {
+interface ERC165 {
     /**
-     * @dev Returns true if this contract implements the interface defined by `interfaceId`
+     * @dev ERC165 standard functions
      */
 
-    function supportsInterface(bytes4 interfaceId) public pure override returns (bool) {
-        return interfaceId == type(IERC165).interfaceId;
-    }
+    function supportsInterface(bytes4 interfaceId) external view returns (bool);
 }

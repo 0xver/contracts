@@ -6,18 +6,18 @@ pragma solidity ^0.8.0;
  * @dev Imports contracts from the library
  */
 
-import "./erc/165/IERC165.sol";
-import "./erc/173/ERC173.sol";
-import "./erc/721/ERC721.sol";
-import "./erc/2981/ERC2981.sol";
-import "./security/Guardian.sol";
+import "./erc/165/ERC165.sol";
+import "./erc/173/Package_ERC173.sol";
+import "./erc/721/Package_ERC721.sol";
+import "./erc/2981/Package_ERC2981.sol";
+import "./security/Package_Guardian.sol";
 
 /**
  * @title My ERC721 Token
  *
  * @dev Extends ERC721 non-fungible token standard
  */
-contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, Guardian {
+contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC165, Package_Guardian {
     /**
      * @dev Handles ETH received by contract
      */
@@ -43,7 +43,7 @@ contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, Guardian {
      * @dev Sets ERC721 and ERC173 constructor values
      */
 
-    constructor() ERC721("My ERC721 Token", "TKN") ERC173(msg.sender) {
+    constructor() Package_ERC721("My ERC721 Token", "TKN") Package_ERC173(msg.sender) {
         // Bored Ape Yacht Club used as an example
         _setExtendedBaseUri("QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq");
     }
@@ -114,13 +114,13 @@ contract MyERC721Token is ERC2981, ERC721, ERC173, IERC165, Guardian {
      * @dev ERC165 function
      */
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public pure override(ERC165) returns (bool) {
         return
-            interfaceId == type(IERC165).interfaceId ||
-            interfaceId == type(IERC173).interfaceId ||
-            interfaceId == type(IERC721).interfaceId ||
-            interfaceId == type(IERC721Metadata).interfaceId ||
-            interfaceId == type(IERC721Receiver).interfaceId ||
-            interfaceId == type(IERC2981).interfaceId;
+            interfaceId == type(ERC165).interfaceId ||
+            interfaceId == type(ERC173).interfaceId ||
+            interfaceId == type(ERC721).interfaceId ||
+            interfaceId == type(ERC721Metadata).interfaceId ||
+            interfaceId == type(ERC721Receiver).interfaceId ||
+            interfaceId == type(ERC2981).interfaceId;
     }
 }

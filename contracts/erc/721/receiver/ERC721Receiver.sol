@@ -5,9 +5,9 @@ pragma solidity ^0.8.0;
 /**
  * @title ERC721Receiver Interface
  *
- * @dev Interface of the ERC721Receiver according to the EIP
+ * @dev Interface for ERC721Receiver
  */
-interface IERC721Receiver {
+interface ERC721Receiver {
     /**
      * @dev ERC721Receiver standard functions
      */

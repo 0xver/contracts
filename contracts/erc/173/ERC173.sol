@@ -2,59 +2,23 @@
 
 pragma solidity ^0.8.0;
 
-import "./IERC173.sol";
-
 /**
- * @title ERC173 Contract
+ * @title ERC173 Interface
  *
- * @dev Implementation of the ERC173 standard
+ * @dev Interface of the ERC173 standard according to the EIP
  */
-contract ERC173 is IERC173 {
+interface ERC173 {
     /**
-     * @dev ERC173 definitions
+     * @dev ERC173 standard events
      */
 
-    address private _owner;
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     /**
-     * @dev Prevents function called by non-owner from executing
+     * @dev ERC173 standard functions
      */
 
-    modifier ownership() {
-        require(owner() == msg.sender, "ERC173: caller is not the owner");
+    function owner() view external returns (address);
 
-        _;
-    }
-
-    /**
-     * @dev Sets the deployer as the initial owner
-     */
-
-    constructor(address owner_) {
-        _transferOwnership(owner_);
-    }
-
-    /**
-     * @dev ERC173 functions
-     */
-
-    function owner() public view override returns (address) {
-
-        return _owner;
-    }
-
-    function transferOwnership(address _newOwner) public override ownership {
-        _transferOwnership(_newOwner);
-    }
-
-    /**
-     * @dev ERC173 internal function
-     */
-    
-    function _transferOwnership(address _newOwner) internal {
-        address previousOwner = _owner;
-        _owner = _newOwner;
-    
-        emit OwnershipTransferred(previousOwner, _newOwner);
-    }
+    function transferOwnership(address _newOwner) external;
 }

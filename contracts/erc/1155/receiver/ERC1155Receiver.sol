@@ -3,9 +3,11 @@
 pragma solidity ^0.8.0;
 
 /**
- * @dev Interface for ERC1155TokenReceiver as defined in the EIP
+ * @title ERC1155TokenReceiver Interface
+ *
+ * @dev Interface for ERC1155TokenReceiver
  */
-interface IERC1155Receiver {
+interface ERC1155Receiver {
     /**
      * @dev ERC1155Receiver standard functions
      */

@@ -3,9 +3,11 @@
 pragma solidity ^0.8.0;
 
 /**
- * @dev Interface for ERC1155Metadata as defined in the EIP
+ * @title ERC1155Metadata Interface
+ *
+ * @dev Interface for ERC1155Metadata
  */
-interface IERC1155Metadata {
+interface ERC1155Metadata {
     /**
      * @dev ERC1155 token metadata functions
      */

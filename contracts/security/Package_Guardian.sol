@@ -7,22 +7,19 @@ pragma solidity ^0.8.0;
  *
  * @dev Prevents reentrancy attack from occuring
  */
-contract Guardian {
+contract Package_Guardian {
     /**
      * @dev Guardian definitions
      */
 
-    bool private constant unlocked = true;
-    bool private constant locked = false;
-
-    bool private _status;
+    bool private _locked;
 
     /**
-     * @dev Sets the `_status` bool to `unlocked`
+     * @dev Sets the `_locked` bool to `false`
      */
 
     constructor() {
-        _status = unlocked;
+        _locked = false;
     }
 
     /**
@@ -30,10 +27,10 @@ contract Guardian {
      */
 
     modifier gate() {
-        require(_status != locked, "Guardian: reentrancy denied");
+        require(_locked == false, "Guardian: reentrancy denied");
 
-        _status = locked;
+        _locked = true;
         _;
-        _status = unlocked;
+        _locked = false;
     }
 }

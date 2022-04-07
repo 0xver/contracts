@@ -5,9 +5,9 @@ pragma solidity ^0.8.0;
 /**
  * @title ERC721Metadata Interface
  *
- * @dev Interface of the ERC721Metadata according to the EIP
+ * @dev Interface for ERC721Metadata
  */
-interface IERC721Metadata {
+interface ERC721Metadata {
     /**
      * @dev ERC721 token metadata functions
      */
