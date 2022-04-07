@@ -6,16 +6,16 @@ pragma solidity ^0.8.0;
  * @dev Imports contracts from the library
  */
 
-import "./erc/173/ERC173.sol";
-import "./erc/20/ERC20.sol";
-import "./security/Guardian.sol";
+import "./erc/20/Package_ERC20.sol";
+import "./erc/173/Package_ERC173.sol";
+import "./security/Package_Guardian.sol";
 
 /**
  * @title My ERC20 Token
  *
  * @dev Extends ERC20 fungible token standard
  */
-contract MyERC20Token is ERC20, ERC173, Guardian {
+contract MyERC20Token is Package_ERC20, Package_ERC173, Package_Guardian {
     /**
      * @dev Handles ETH received by contract
      */
@@ -42,7 +42,7 @@ contract MyERC20Token is ERC20, ERC173, Guardian {
      * @dev Sets ERC20 constructor values and mints total token supply to deployer
      */
 
-    constructor() ERC20("My ERC20 Token", "TKN") ERC173(msg.sender) {
+    constructor() Package_ERC20("My ERC20 Token", "TKN") Package_ERC173(msg.sender) {
         _mint(msg.sender, 1000000000 * 10 ** decimals());
     }
 
@@ -51,7 +51,7 @@ contract MyERC20Token is ERC20, ERC173, Guardian {
      */
 
     function stake(uint256 _value) public gate {
-        require(balanceOf(msg.sender) > 0, "MyFungibleToken: zero token balance");
+        require(balanceOf(msg.sender) > 0, "MyERC20Token: zero token balance");
 
         _timestamp[msg.sender] = block.timestamp;
         _staked[msg.sender] = _value;
@@ -66,8 +66,8 @@ contract MyERC20Token is ERC20, ERC173, Guardian {
      */
 
     function claim() public gate {
-        require(_staked[msg.sender] > 0, "MyFungibleToken: no tokens staked");
-        require(_timestamp[msg.sender] + 30 days <= block.timestamp, "MyFungibleToken: lock time has not completed");
+        require(_staked[msg.sender] > 0, "MyERC20Token: no tokens staked");
+        require(_timestamp[msg.sender] + 30 days <= block.timestamp, "MyERC20Token: lock time has not completed");
 
         uint256 staked = _staked[msg.sender];
 
@@ -88,7 +88,7 @@ contract MyERC20Token is ERC20, ERC173, Guardian {
     function withdraw(address _to) public ownership {
         uint256 balance = address(this).balance;
         (bool success, ) = payable(_to).call{value: address(this).balance}("");
-        require(success, "MyContract: ether transfer failed");
+        require(success, "MyERC20Token: ether transfer failed");
 
         emit Withdraw(msg.sender, _to, balance);
     }
