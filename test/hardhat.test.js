@@ -120,11 +120,17 @@ const { ethers } = require("hardhat")
     expect(await MyERC721Token.whitelisted(addr2.address)).equal(true)
     expect(await MyERC721Token.whitelisted(addr3.address)).equal(true)
 
-    // Initiate public mint
-    await MyERC721Token.pauseMint(false)
+    // Should return false
+    expect(await MyERC721Token.paused()).equal(true)
+
+    // Initiate minting
+    await MyERC721Token.unpause(false)
+
+    // Should return true
+    expect(await MyERC721Token.paused()).equal(false)
 
     // Mint with addr2 during whitelist pre-mint
-    await MyERC721Token.mint(addr2.address, 20, 5)
+    await MyERC721Token.onChainWhitelistMint(addr2.address, 20, 5)
 
     // Token balance for addr2 should equal 1
     expect(await MyERC721Token.balanceOf(addr2.address)).equal(5)
@@ -136,7 +142,7 @@ const { ethers } = require("hardhat")
     expect(await MyERC721Token.tokenURI(1)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1")
 
     // Mint with addr3
-    await MyERC721Token.mint(addr3.address, 20, 1)
+    await MyERC721Token.onChainWhitelistMint(addr3.address, 20, 1)
 
     // Token balance for addr3 should equal 1
     expect(await MyERC721Token.balanceOf(addr3.address)).equal(1)
@@ -155,6 +161,22 @@ const { ethers } = require("hardhat")
 
     // Token balance for addr3 should equal 2
     expect(await MyERC721Token.balanceOf(addr3.address)).equal(2)
+
+    // Test off-chain whitelist mint
+    // Update the root each time the whitelist is updated
+    const { MerkleTree } = require("merkletreejs")
+    const keccak256 = require("keccak256")
+    const whitelist = require("./whitelist.js")
+
+    const leafNodes = whitelist.map(addr => keccak256(addr))
+    const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true})
+    const rootHash = merkleTree.getRoot()
+    const root = "0x" + rootHash.toString("hex")
+    var address = "0x4Bd6A62151342fF7608bE069623dF0596069c8E0"
+    var whitelistAddress = keccak256(address)
+    var hexProof = merkleTree.getHexProof(whitelistAddress)
+
+    await MyERC721Token.merkleProofMint(address, hexProof, root, 5, 1)
   })
 })
 
