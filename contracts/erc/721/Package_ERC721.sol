@@ -31,6 +31,8 @@ contract Package_ERC721 is ERC721, ERC721Metadata {
     string private _name;
     string private _symbol;
 
+    bytes32 private root;
+
     /**
      * @dev ERC721Metadata functions
      */
@@ -59,9 +61,17 @@ contract Package_ERC721 is ERC721, ERC721Metadata {
      * @dev Minting functions
      */
 
-    function _merkleProofMint(address _to, bytes32[] calldata _merkleProof, bytes32 _merkleRoot) internal {
+    function _setMerkleRoot(bytes32 _root) internal {
+        root = _root;
+    }
+    
+    function merkleRoot() internal view returns (bytes32) {
+        return root;
+    }
+
+    function _merkleProofMint(address _to, bytes32[] calldata _merkleProof) internal {
         bytes32 leaf = keccak256(abi.encodePacked(_to));
-        require(utils.verify(_merkleProof, _merkleRoot, leaf), "ERC721: invalid merkle proof.");
+        require(utils.verify(_merkleProof, merkleRoot(), leaf), "ERC721: invalid merkle proof.");
         
         _mint(_to);
     }

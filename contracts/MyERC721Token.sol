@@ -82,12 +82,20 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC16
     }
 
     /**
+     * @dev Set Merkle root
+     */
+    
+    function setMerkleRoot(bytes32 _merkleRoot) public ownership {
+        _setMerkleRoot(_merkleRoot);
+    }
+
+    /**
      * @dev Mint function for off-chain whitelist
      */
 
-    function merkleProofMint(address _account, bytes32[] calldata _merkleProof, bytes32 _merkleRoot, uint256 _percent, uint256 _quantity) public gate {
+    function merkleProofMint(address _account, bytes32[] calldata _merkleProof, uint256 _percent, uint256 _quantity) public gate {
         for (uint256 i=0; i < _quantity; i++) {
-            _merkleProofMint(_account, _merkleProof, _merkleRoot);
+            _merkleProofMint(_account, _merkleProof);
             _setTokenRoyalty(_currentTokenId(), _account, _percent);
         }
     }
