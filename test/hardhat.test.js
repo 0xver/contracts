@@ -176,7 +176,8 @@ const { ethers } = require("hardhat")
     var whitelistAddress = keccak256(address)
     var hexProof = merkleTree.getHexProof(whitelistAddress)
 
-    await MyERC721Token.merkleProofMint(address, hexProof, root, 5, 1)
+    await MyERC721Token.setMerkleRoot(root)
+    await MyERC721Token.merkleProofMint(address, hexProof, 5, 1)
   })
 })
 
