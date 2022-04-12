@@ -6,7 +6,7 @@ import "../165/ERC165.sol";
 import "./ERC721.sol";
 import "./extensions/ERC721Metadata.sol";
 import "./receiver/ERC721Receiver.sol";
-import "../../library/String.sol";
+import "../../library/utils.sol";
 
 /**
  * @title ERC721 Contract
@@ -52,18 +52,21 @@ contract Package_ERC721 is ERC721, ERC721Metadata {
 
     function tokenURI(uint256 _tokenId) public view override returns (string memory) {
 
-        return string(abi.encodePacked(_ipfs(), _extendedBaseUri, "/", String.toString(_tokenId)));
+        return string(abi.encodePacked(_ipfs(), _extendedBaseUri, "/", utils.toString(_tokenId)));
     }
 
     /**
      * @dev Minting functions
      */
 
-    function _mint(address _to) internal {
-        _mintSingleToken(_to);
+    function _merkleProofMint(address _to, bytes32[] calldata _merkleProof, bytes32 _merkleRoot) internal {
+        bytes32 leaf = keccak256(abi.encodePacked(_to));
+        require(utils.verify(_merkleProof, _merkleRoot, leaf), "ERC721: invalid merkle proof.");
+        
+        _mint(_to);
     }
 
-    function _mintSingleToken(address _to) internal {
+    function _mint(address _to) internal {
         require(_to != address(0), "ERC721: cannot mint to the zero address");
 
         _currentId += 1;

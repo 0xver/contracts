@@ -29,7 +29,6 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC16
      * @dev Events
      */
 
-    event Mint(address receiver, uint256 tokenId, string cid);
     event Withdraw(address operator, address receiver, uint256 value);
 
     /**
@@ -49,18 +48,7 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC16
     }
 
     /**
-     * @dev Internal mint routing
-     */
-
-    function _routeMint(address _to, uint256 _percent) internal {
-        _mint(_to);
-        _setTokenRoyalty(_currentTokenId(), _to, _percent);
-
-        emit Mint(_to, _currentTokenId(), tokenURI(_currentTokenId()));
-    }
-
-    /**
-     * @dev Adds accounts to whitelist
+     * @dev Adds accounts to on-chain whitelist
      */
 
     function addToWhitelist(address[] memory _accounts) public ownership {
@@ -70,7 +58,7 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC16
     }
 
     /**
-     * @dev Checks if account is whitelisted
+     * @dev Checks if account is whitelisted on-chain
      */
 
     function whitelisted(address _account) public view returns (bool) {
@@ -78,23 +66,43 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC16
     }
 
     /**
-     * @dev Initiate public mint
+     * @dev Initiate minting
      */
 
-    function pauseMint(bool _status) public ownership {
+    function unpause(bool _status) public ownership {
         _pauseMint = _status;
     }
 
     /**
-     * @dev Mint function with pre-mint for whitelist
+     * @dev Returns `true` if minting is paused
      */
 
-    function mint(address _account, uint256 _percent, uint256 _quantity) public gate {
+    function paused() public view returns (bool) {
+        return _pauseMint;
+    }
+
+    /**
+     * @dev Mint function for off-chain whitelist
+     */
+
+    function merkleProofMint(address _account, bytes32[] calldata _merkleProof, bytes32 _merkleRoot, uint256 _percent, uint256 _quantity) public gate {
+        for (uint256 i=0; i < _quantity; i++) {
+            _merkleProofMint(_account, _merkleProof, _merkleRoot);
+            _setTokenRoyalty(_currentTokenId(), _account, _percent);
+        }
+    }
+
+    /**
+     * @dev Mint function for on-chain whitelist
+     */
+
+    function onChainWhitelistMint(address _account, uint256 _percent, uint256 _quantity) public gate {
         require(_pauseMint == false, "MyERC721Token: minting is paused");
         require(_whitelist[_account] == true, "MyERC721Token: account not on whitelist");
         _whitelist[_account] = false;
         for (uint256 i=0; i < _quantity; i++) {
-            _routeMint(_account, _percent);
+            _mint(_account);
+            _setTokenRoyalty(_currentTokenId(), _account, _percent);
         }
     }
 
