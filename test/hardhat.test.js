@@ -166,12 +166,13 @@ const { ethers } = require("hardhat")
     // Update the root each time the whitelist is updated
     const { MerkleTree } = require("merkletreejs")
     const keccak256 = require("keccak256")
-    const whitelist = require("./whitelist.js")
+    const whitelist = require("./whitelist.json")
 
     const leafNodes = whitelist.map(addr => keccak256(addr))
     const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true})
     const rootHash = merkleTree.getRoot()
     const root = "0x" + rootHash.toString("hex")
+
     var address = "0x4Bd6A62151342fF7608bE069623dF0596069c8E0"
     var whitelistAddress = keccak256(address)
     var hexProof = merkleTree.getHexProof(whitelistAddress)
