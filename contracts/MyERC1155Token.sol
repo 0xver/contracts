@@ -72,7 +72,7 @@ contract MyERC1155Token is Package_ERC1155, Package_ERC173, ERC165, Package_Guar
     }
 
     /**
-     * @dev ERC165 function
+     * @dev Return `true` if supports interface
      */
 
     function supportsInterface(bytes4 interfaceId) public pure override(ERC165) returns (bool) {

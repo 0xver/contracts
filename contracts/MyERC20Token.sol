@@ -39,7 +39,7 @@ contract MyERC20Token is Package_ERC20, Package_ERC173, Package_Guardian {
     mapping(address => uint256) private _staked;
 
     /**
-     * @dev Sets ERC20 constructor values and mints total token supply to deployer
+     * @dev Set ERC20 constructor values and mints total token supply to deployer
      */
 
     constructor() Package_ERC20("My ERC20 Token", "TKN") Package_ERC173(msg.sender) {
@@ -47,7 +47,7 @@ contract MyERC20Token is Package_ERC20, Package_ERC173, Package_Guardian {
     }
 
     /**
-     * @dev Token staking function
+     * @dev Token staking
      */
 
     function stake(uint256 _value) public gate {
@@ -62,7 +62,7 @@ contract MyERC20Token is Package_ERC20, Package_ERC173, Package_Guardian {
     }
 
     /**
-     * @dev Token claim function
+     * @dev Token claim
      */
 
     function claim() public gate {

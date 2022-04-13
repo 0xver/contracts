@@ -39,7 +39,7 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC16
     bool private _pauseMint = true;
 
     /**
-     * @dev Sets ERC721 and ERC173 constructor values
+     * @dev Set ERC721 and ERC173 constructor values
      */
 
     constructor() Package_ERC721("My ERC721 Token", "TKN") Package_ERC173(msg.sender) {
@@ -48,7 +48,7 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC16
     }
 
     /**
-     * @dev Adds accounts to on-chain whitelist
+     * @dev Add accounts to on-chain whitelist
      */
 
     function addToWhitelist(address[] memory _accounts) public ownership {
@@ -58,7 +58,7 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC16
     }
 
     /**
-     * @dev Checks if account is whitelisted on-chain
+     * @dev Return `true` if account is whitelisted
      */
 
     function whitelisted(address _account) public view returns (bool) {
@@ -74,7 +74,7 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC16
     }
 
     /**
-     * @dev Returns `true` if minting is paused
+     * @dev Return `true` if minting is paused
      */
 
     function paused() public view returns (bool) {
@@ -127,7 +127,7 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC16
     }
 
     /**
-     * @dev ERC165 function
+     * @dev Return `true` if supports interface
      */
 
     function supportsInterface(bytes4 interfaceId) public pure override(ERC165) returns (bool) {
