@@ -140,7 +140,10 @@ const { ethers } = require("hardhat")
 
     // Token URI should be prereveal
     expect(await MyERC721Token.tokenURI(1)).equal("ipfs://pr34v31/prereveal.json")
-    
+
+    // Check reveal URI
+    expect(await MyERC721Token.checkURI(1)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1")
+
     // Reveal tokens
     await MyERC721Token.connect(addr1).reveal()
 
