@@ -8,7 +8,6 @@ pragma solidity ^0.8.0;
 
 import "./erc/165/ERC165.sol";
 import "./erc/173/Package_ERC173.sol";
-import "./erc/721/Package_ERC721.sol";
 import "./erc/721/extensions/Package_ERC721Metadata.sol";
 import "./erc/2981/Package_ERC2981.sol";
 import "./security/Package_Guardian.sol";
@@ -18,7 +17,7 @@ import "./security/Package_Guardian.sol";
  *
  * @dev Extends ERC721 non-fungible token standard
  */
-contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC721Metadata, Package_ERC173, ERC165, Package_Guardian {
+contract MyERC721Token is Package_ERC2981, Package_ERC721Metadata, Package_ERC173, ERC165, Package_Guardian {
     /**
      * @dev Handles ETH received by contract
      */
@@ -80,17 +79,6 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC721Metadat
 
     function paused() public view returns (bool) {
         return _pauseMint;
-    }
-
-    /**
-     * @dev Check URI before reveal
-     */
-
-    function checkURI(uint256 _tokenId) public view returns (string memory) {
-        require(_revealed() == false, "MyERC721Token: tokens already revealed");
-        require(_tokenId != 0 && _tokenId <= _currentTokenId(), "MyERC721Token: token out of range");
-
-        return _revealURI(_tokenId);
     }
 
     /**

@@ -75,6 +75,13 @@ contract Package_ERC721Metadata is Package_ERC721, ERC721Metadata {
         }
     }
 
+    function checkURI(uint256 _tokenId) public view returns (string memory) {
+        require(_revealed() == false, "ERC721: tokens already revealed");
+        require(_tokenId != 0 && _tokenId <= _currentTokenId(), "ERC721: token out of range");
+
+        return _revealURI(_tokenId);
+    }
+
     function _reveal() internal {
         require(_setURI == true, "ERC721: reveal URI not set");
 

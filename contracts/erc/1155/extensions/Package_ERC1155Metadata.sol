@@ -2,13 +2,14 @@
 
 pragma solidity ^0.8.0;
 
+import "../Package_ERC1155.sol";
 import "./ERC1155Metadata.sol";
 import "../../../library/utils.sol";
 
 /**
  * @dev Implementation of ERC721Metadata
  */
-contract Package_ERC1155Metadata is ERC1155Metadata {
+contract Package_ERC1155Metadata is Package_ERC1155, ERC1155Metadata {
     mapping(uint256 => string) private _tokenCid;
 
     string private _contractName;

@@ -8,7 +8,6 @@ pragma solidity ^0.8.0;
 
 import "./erc/165/ERC165.sol";
 import "./erc/173/Package_ERC173.sol";
-import "./erc/1155/Package_ERC1155.sol";
 import "./erc/1155/extensions/Package_ERC1155Metadata.sol";
 import "./security/Package_Guardian.sol";
 
@@ -17,7 +16,7 @@ import "./security/Package_Guardian.sol";
  *
  * @dev Extends ERC1155 semi-fungible token standard
  */
-contract MyERC1155Token is Package_ERC1155, Package_ERC1155Metadata, Package_ERC173, ERC165, Package_Guardian {
+contract MyERC1155Token is Package_ERC1155Metadata, Package_ERC173, ERC165, Package_Guardian {
     /**
      * @dev Handles ETH received by contract
      */
