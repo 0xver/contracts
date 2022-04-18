@@ -83,6 +83,17 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC721Metadat
     }
 
     /**
+     * @dev Check URI before reveal
+     */
+
+    function checkURI(uint256 _tokenId) public view returns (string memory) {
+        require(_revealed() == false, "MyERC721Token: tokens already revealed");
+        require(_tokenId != 0 && _tokenId <= _currentTokenId(), "MyERC721Token: token out of range");
+
+        return _revealURI(_tokenId);
+    }
+
+    /**
      * @dev Reveal token collection
      */
 
