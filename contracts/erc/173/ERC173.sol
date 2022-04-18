@@ -3,19 +3,17 @@
 pragma solidity ^0.8.0;
 
 /**
- * @title ERC173 Interface
- *
- * @dev Interface of the ERC173 standard according to the EIP
+ * @dev ERC173 standard
  */
 interface ERC173 {
     /**
-     * @dev ERC173 standard events
+     * @dev Events
      */
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     /**
-     * @dev ERC173 standard functions
+     * @dev Functions
      */
 
     function owner() view external returns (address);

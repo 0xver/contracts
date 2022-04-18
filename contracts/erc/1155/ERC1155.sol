@@ -3,11 +3,11 @@
 pragma solidity ^0.8.0;
 
 /**
- * @dev Interface of the ERC1155 standard
+ * @title ERC1155 standard
  */
 interface ERC1155 {
     /**
-     * @dev ERC1155 standard events
+     * @dev Events
      */
     event TransferSingle(address indexed _operator, address indexed _from, address indexed _to, uint256 _id, uint256 _value);
 
@@ -18,7 +18,7 @@ interface ERC1155 {
     event URI(string _value, uint256 indexed _id);
 
     /**
-     * @dev ERC1155 standard functions
+     * @dev Functions
      */
     function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes calldata _data) external;
 

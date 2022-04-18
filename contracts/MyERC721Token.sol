@@ -9,6 +9,7 @@ pragma solidity ^0.8.0;
 import "./erc/165/ERC165.sol";
 import "./erc/173/Package_ERC173.sol";
 import "./erc/721/Package_ERC721.sol";
+import "./erc/721/extensions/Package_ERC721Metadata.sol";
 import "./erc/2981/Package_ERC2981.sol";
 import "./security/Package_Guardian.sol";
 
@@ -17,7 +18,7 @@ import "./security/Package_Guardian.sol";
  *
  * @dev Extends ERC721 non-fungible token standard
  */
-contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC165, Package_Guardian {
+contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC721Metadata, Package_ERC173, ERC165, Package_Guardian {
     /**
      * @dev Handles ETH received by contract
      */
@@ -42,9 +43,9 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC16
      * @dev Set ERC721 and ERC173 constructor values
      */
 
-    constructor() Package_ERC721("My ERC721 Token", "TKN") Package_ERC173(msg.sender) {
+    constructor() Package_ERC721Metadata("My ERC721 Token", "TKN", "pr34v31/prereveal.json") Package_ERC173(msg.sender) {
         // Bored Ape Yacht Club used as an example
-        _setExtendedBaseUri("QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq");
+        _setRevealURI("QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq", false);
     }
 
     /**
@@ -79,6 +80,14 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721, Package_ERC173, ERC16
 
     function paused() public view returns (bool) {
         return _pauseMint;
+    }
+
+    /**
+     * @dev Reveal token collection
+     */
+
+    function reveal() public ownership {
+        _reveal();
     }
 
     /**

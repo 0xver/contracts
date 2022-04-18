@@ -3,13 +3,11 @@
 pragma solidity ^0.8.0;
 
 /**
- * @title ERC721Receiver Interface
- *
- * @dev Interface for ERC721Receiver
+ * @title ERC721Receiver standard
  */
 interface ERC721Receiver {
     /**
-     * @dev ERC721Receiver standard functions
+     * @dev Functions
      */
 
     function onERC721Received(address _operator, address _from, uint256 _tokenId, bytes calldata _data) external returns (bytes4);

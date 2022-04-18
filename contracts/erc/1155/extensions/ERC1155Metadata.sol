@@ -3,13 +3,11 @@
 pragma solidity ^0.8.0;
 
 /**
- * @title ERC1155Metadata Interface
- *
- * @dev Interface for ERC1155Metadata
+ * @title ERC1155Metadata standard
  */
 interface ERC1155Metadata {
     /**
-     * @dev ERC1155 token metadata functions
+     * @dev Functions
      */
     function uri(uint256 _id) external view returns (string memory);
 }

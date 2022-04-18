@@ -3,13 +3,11 @@
 pragma solidity ^0.8.0;
 
 /**
- * @title ERC721 Interface
- *
- * @dev Interface of the ERC721 standard
+ * @title ERC721 standard
  */
 interface ERC721 {
     /**
-     * @dev ERC721 standard events
+     * @dev Events
      */
 
     event Transfer(address indexed _from, address indexed _to, uint256 indexed _tokenId);
@@ -19,7 +17,7 @@ interface ERC721 {
     event ApprovalForAll(address indexed _owner, address indexed _operator, bool _approved);
 
     /**
-     * @dev ERC721 standard functions
+     * @dev Functions
      */
 
     function balanceOf(address _owner) external view returns (uint256);

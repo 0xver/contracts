@@ -5,15 +5,9 @@ pragma solidity ^0.8.0;
 import "./ERC20.sol";
 
 /**
- * @title ERC20 Contract
- *
- * @dev Implementation of the ERC20 standard
+ * @dev Implementation of ERC20
  */
 contract Package_ERC20 is ERC20 {
-    /**
-     * @dev ERC20 definitions
-     */
-
     mapping(address => uint256) private _balances;
     mapping(address => mapping(address => uint256)) private _allowances;
 
@@ -21,41 +15,28 @@ contract Package_ERC20 is ERC20 {
     string private _symbol;
     uint256 private _totalSupply;
 
-    /**
-     * @dev Sets the token name and symbol
-     */
-
     constructor(string memory name_, string memory symbol_) {
         _name = name_;
         _symbol = symbol_;
     }
 
-    /**
-     * @dev ERC20 functions
-     */
-
     function name() public view override returns (string memory) {
-
         return _name;
     }
 
     function symbol() public view override returns (string memory) {
-
         return _symbol;
     }
 
     function decimals() public pure override returns (uint8) {
-
         return 18;
     }
 
     function totalSupply() public view override returns (uint256) {
-
         return _totalSupply;
     }
 
     function balanceOf(address _owner) public view override returns (uint256) {
-
         return _balances[_owner];
     }
 
@@ -63,7 +44,6 @@ contract Package_ERC20 is ERC20 {
         require(balanceOf(msg.sender) >= _value, "ERC20: value exceeds balance");
 
         _transfer(msg.sender, _to, _value);
-
         return true;
     }
 
@@ -77,7 +57,6 @@ contract Package_ERC20 is ERC20 {
         }
 
         _transfer(_from, _to, _value);
-
         return true;
     }
 
@@ -88,18 +67,12 @@ contract Package_ERC20 is ERC20 {
         _allowances[msg.sender][_spender] = _value;
 
         emit Approval(msg.sender, _spender, _value);
-
         return true;
     }
 
     function allowance(address _owner, address _spender) public view override returns (uint256) {
-
         return _allowances[_owner][_spender];
     }
-
-    /**
-     * @dev ERC20 internal functions
-     */
 
     function _transfer(address _from, address _to, uint256 _value) internal {
         require(_to != address(0), "ERC20: transfer to the zero address");

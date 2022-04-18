@@ -3,13 +3,11 @@
 pragma solidity ^0.8.0;
 
 /**
- * @title ERC1155TokenReceiver Interface
- *
- * @dev Interface for ERC1155TokenReceiver
+ * @title ERC1155TokenReceiver standard
  */
 interface ERC1155Receiver {
     /**
-     * @dev ERC1155Receiver standard functions
+     * @dev Functions
      */
     function onERC1155Received(address _operator, address _from, uint256 _id, uint256 _value, bytes calldata _data) external returns(bytes4);
 

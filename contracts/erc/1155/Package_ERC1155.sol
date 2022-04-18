@@ -7,41 +7,17 @@ import "./extensions/ERC1155Metadata.sol";
 import "./receiver/ERC1155Receiver.sol";
 
 /**
- * @title ERC1155 Contract
- *
- * @dev Implementation of the ERC1155 standard
+ * @dev Implementation of ERC1155
  */
-contract Package_ERC1155 is ERC1155, ERC1155Metadata {
-    /**
-     * @dev ERC1155 definitions
-     */
-
+contract Package_ERC1155 is ERC1155 {
     mapping(uint256 => mapping(address => uint256)) private _ownerBalance;
     mapping(address => mapping(address => bool)) private _operatorApproval;
-    mapping(uint256 => string) private _tokenCid;
 
     mapping(uint256 => uint256) private _totalSupply;
     uint256 private _currentId = 0;
 
-    string private _name;
-    string private _symbol;
-
-    /**
-     * @dev Contract name and symbol
-     */
-
-    constructor(string memory name_, string memory symbol_) {
-        _name = name_;
-        _symbol = symbol_;
-    }
-
-    /**
-     * @dev Minting functions
-     */
-
-    function _initTokenId(string memory _cid) internal {
+    function _initTokenId() internal {
         _currentId += 1;
-        _tokenCid[_currentId] = _cid;
     }
 
     function _mint(address _to, uint256 _id, uint256 _value) internal {
@@ -56,33 +32,12 @@ contract Package_ERC1155 is ERC1155, ERC1155Metadata {
     }
 
     function _currentTokenId() internal view returns (uint256) {
-
         return _currentId;
     }
 
-    function _baseUri() internal pure returns (string memory) {
-
-        return "ipfs://";
-    }
-
     function totalSupply(uint256 _id) public view returns (uint256) {
-
         return _totalSupply[_id];
     }
-
-    /**
-     * @dev ERC1155Metadata functions
-     */
-
-    function uri(uint256 _id) public view override returns (string memory) {
-        string memory tokenCid = _tokenCid[_id];
-
-        return string(abi.encodePacked(_baseUri(), tokenCid));
-    }
-
-    /**
-     * @dev ERC1155 functions
-     */
 
     function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes memory _data) public override {
         require(_from == msg.sender || isApprovedForAll(_from, msg.sender), "ERC1155: unauthorized transfer");
@@ -143,19 +98,12 @@ contract Package_ERC1155 is ERC1155, ERC1155Metadata {
     }
 
     function isApprovedForAll(address _owner, address _operator) public view override returns (bool) {
-
         return _operatorApproval[_owner][_operator];
     }
 
-    /**
-     * @dev ERC1155Receiver functions
-     */
-    
     function _safeTransferCheck(address _operator, address _from, address _to, uint256 _id, uint256 _value, bytes memory _data) private {
         uint256 size;
-        assembly {
-            size := extcodesize(_to)
-        }
+        assembly {size := extcodesize(_to)}
         if (size > 0) {
             try ERC1155Receiver(_to).onERC1155Received(_operator, _from, _id, _value, _data) returns (bytes4 response) {
                 if (response != ERC1155Receiver.onERC1155Received.selector) {
@@ -171,9 +119,7 @@ contract Package_ERC1155 is ERC1155, ERC1155Metadata {
 
     function _safeBatchTransferCheck(address _operator, address _from, address _to, uint256[] memory _ids, uint256[] memory _values, bytes memory _data) private {
         uint256 size;
-        assembly {
-            size := extcodesize(_to)
-        }
+        assembly {size := extcodesize(_to)}
         if (size > 0) {
             try ERC1155Receiver(_to).onERC1155BatchReceived(_operator, _from, _ids, _values, _data) returns (bytes4 response) {
                 if (response != ERC1155Receiver.onERC1155BatchReceived.selector) {

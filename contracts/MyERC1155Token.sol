@@ -9,14 +9,15 @@ pragma solidity ^0.8.0;
 import "./erc/165/ERC165.sol";
 import "./erc/173/Package_ERC173.sol";
 import "./erc/1155/Package_ERC1155.sol";
+import "./erc/1155/extensions/Package_ERC1155Metadata.sol";
 import "./security/Package_Guardian.sol";
 
 /**
  * @title My ERC1155 Token
  *
- * @dev Extends ERC1155 non-fungible token standard
+ * @dev Extends ERC1155 semi-fungible token standard
  */
-contract MyERC1155Token is Package_ERC1155, Package_ERC173, ERC165, Package_Guardian {
+contract MyERC1155Token is Package_ERC1155, Package_ERC1155Metadata, Package_ERC173, ERC165, Package_Guardian {
     /**
      * @dev Handles ETH received by contract
      */
@@ -40,7 +41,7 @@ contract MyERC1155Token is Package_ERC1155, Package_ERC173, ERC165, Package_Guar
      * @dev Sets ERC1155 constructor values
      */
 
-    constructor() Package_ERC1155("My ERC1155 Token", "TKN") Package_ERC173(msg.sender) {
+    constructor() Package_ERC1155Metadata("My ERC1155 Token", "TKN") Package_ERC173(msg.sender) {
     }
 
     /**
@@ -48,7 +49,8 @@ contract MyERC1155Token is Package_ERC1155, Package_ERC173, ERC165, Package_Guar
      */
 
     function initTokenId(string memory _cid) public ownership {
-        _initTokenId(_cid);
+        _initTokenId();
+        _setTokenURI(_currentTokenId(), _cid);
     }
 
     /**
