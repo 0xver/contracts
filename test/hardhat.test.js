@@ -138,6 +138,12 @@ const { ethers } = require("hardhat")
     // Token owner of ID 1 should be addr2
     expect(await MyERC721Token.ownerOf(1)).equal(addr2.address)
 
+    // Token URI should be prereveal
+    expect(await MyERC721Token.tokenURI(1)).equal("ipfs://pr34v31/prereveal.json")
+    
+    // Reveal tokens
+    await MyERC721Token.connect(addr1).reveal()
+
     // Token URI should return correct identifier
     expect(await MyERC721Token.tokenURI(1)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1")
 
