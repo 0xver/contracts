@@ -278,6 +278,32 @@ const { ethers } = require("hardhat")
 })
 
 /**
+ * @dev Checks supports interface for MyERC20Token
+ */
+ describe("", function () {
+  it("Supports interface for MyERC721Token", async function () {
+    /**
+     * @dev Contract deployments
+     */
+
+    // Deploys tokens
+    var Token
+    Token = await ethers.getContractFactory("MyERC20Token")
+    const MyERC20Token = await Token.deploy()
+
+    /**
+     * @dev Check for supports interface
+     */
+
+    // ERC165 support should return true
+    expect(await MyERC20Token.supportsInterface(ethers.utils.hexlify(0x01ffc9a7))).equal(true)
+
+    // ERC173 support should return true
+    expect(await MyERC20Token.supportsInterface(ethers.utils.hexlify(0x7f5828d0))).equal(true)
+  })
+})
+
+/**
  * @dev Checks supports interface for MyERC721Token
  */
  describe("", function () {
