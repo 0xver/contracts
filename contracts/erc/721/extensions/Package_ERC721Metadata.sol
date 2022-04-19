@@ -39,8 +39,9 @@ contract Package_ERC721Metadata is Package_ERC721, ERC721Metadata {
     }
 
     function tokenURI(uint256 _tokenId) public view override returns (string memory) {
-        require(_tokenId != 0 && _tokenId <= _currentTokenId(), "ERC721: token out of range");
-        if (_overrideCid[_tokenId] == true) {
+        if (_tokenId == 0 || _tokenId > _currentTokenId()) {
+            return "Token ID out of range";
+        } else if (_overrideCid[_tokenId] == true) {
             return string(abi.encodePacked(_ipfs(), _tokenCid[_tokenId]));
         } else {
             if (_isRevealed == true) {
@@ -48,6 +49,14 @@ contract Package_ERC721Metadata is Package_ERC721, ERC721Metadata {
             } else {
                 return string(abi.encodePacked(_ipfs(), _fallbackCid));
             }
+        }
+    }
+
+    function _revealURI(uint256 _tokenId) internal view returns (string memory) {
+        if (_jsonExtension == true) {
+            return string(abi.encodePacked(_ipfs(), _metadata, "/", utils.toString(_tokenId), ".json"));
+        } else {
+            return string(abi.encodePacked(_ipfs(), _metadata, "/", utils.toString(_tokenId)));
         }
     }
 
@@ -67,19 +76,14 @@ contract Package_ERC721Metadata is Package_ERC721, ERC721Metadata {
         _setURI = true;
     }
 
-    function _revealURI(uint256 _tokenId) internal view returns (string memory) {
-        if (_jsonExtension == true) {
-            return string(abi.encodePacked(_ipfs(), _metadata, "/", utils.toString(_tokenId), ".json"));
-        } else {
-            return string(abi.encodePacked(_ipfs(), _metadata, "/", utils.toString(_tokenId)));
-        }
-    }
-
     function checkURI(uint256 _tokenId) public view returns (string memory) {
-        require(_revealed() == false, "ERC721: tokens already revealed");
-        require(_tokenId != 0 && _tokenId <= _currentTokenId(), "ERC721: token out of range");
-
-        return _revealURI(_tokenId);
+        if (_tokenId == 0 || _tokenId > _currentTokenId()) {
+            return "Token ID out of range";
+        } else if (_revealed() == true) {
+            return "Tokens have been revealed";
+        } else {
+            return _revealURI(_tokenId);
+        }
     }
 
     function _reveal() internal {
