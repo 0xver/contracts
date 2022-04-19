@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import "./ERC2981.sol";
+import "../../erc/2981/ERC2981.sol";
 
 /**
  * @dev Implementation of ERC2981

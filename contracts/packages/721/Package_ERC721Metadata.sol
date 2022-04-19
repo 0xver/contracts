@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-import "../Package_ERC721.sol";
-import "./ERC721Metadata.sol";
-import "../../../library/utils.sol";
+import "./Package_ERC721.sol";
+import "../../erc/721/extensions/ERC721Metadata.sol";
+import "../../library/utils.sol";
 
 /**
  * @dev Implementation of ERC721Metadata

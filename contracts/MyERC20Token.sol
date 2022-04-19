@@ -2,47 +2,23 @@
 
 pragma solidity ^0.8.0;
 
-/**
- * @dev Imports contracts from the library
- */
-
-import "./erc/20/Package_ERC20.sol";
-import "./erc/173/Package_ERC173.sol";
-import "./security/Package_Guardian.sol";
+import "./packages/Bundle_ERC20.sol";
 
 /**
  * @title My ERC20 Token
- *
- * @dev Extends ERC20 fungible token standard
  */
-contract MyERC20Token is Package_ERC20, Package_ERC173, Package_Guardian {
-    /**
-     * @dev Handles ETH received by contract
-     */
-
+contract MyERC20Token is Bundle {
     receive() external payable {}
     fallback() external payable {}
-
-    /**
-     * @dev Events
-     */
 
     event Stake(address staker, uint256 value, uint256 time);
     event Claim(address staker, uint256 value);
     event Withdraw(address operator, address receiver, uint256 value);
 
-    /**
-     * @dev MyFungibleToken definitions
-     */
-
     mapping(address => uint256) private _timestamp;
     mapping(address => uint256) private _staked;
 
-    /**
-     * @dev Set ERC20 constructor values and mints total token supply to deployer
-     */
-
-    constructor() Package_ERC20("My ERC20 Token", "TKN") Package_ERC173(msg.sender) {
+    constructor() {
         _mint(msg.sender, 1000000000 * 10 ** decimals());
     }
 

@@ -2,8 +2,8 @@
 
 pragma solidity ^0.8.0;
 
-import "./ERC721.sol";
-import "./receiver/ERC721Receiver.sol";
+import "../../erc/721/ERC721.sol";
+import "../../erc/721/receiver/ERC721Receiver.sol";
 import "../../library/utils.sol";
 
 /**

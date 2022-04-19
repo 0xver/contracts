@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import "./ERC173.sol";
+import "../../erc/173/ERC173.sol";
 
 /**
  * @dev Implementation of the ERC173

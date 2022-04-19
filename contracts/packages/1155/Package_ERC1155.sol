@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-import "./ERC1155.sol";
-import "./extensions/ERC1155Metadata.sol";
-import "./receiver/ERC1155Receiver.sol";
+import "../../erc/1155/ERC1155.sol";
+import "../../erc/1155/extensions/ERC1155Metadata.sol";
+import "../../erc/1155/receiver/ERC1155Receiver.sol";
 
 /**
  * @dev Implementation of ERC1155

@@ -2,47 +2,21 @@
 
 pragma solidity ^0.8.0;
 
-/**
- * @dev Imports contracts from the library
- */
-
-import "./erc/165/ERC165.sol";
-import "./erc/173/Package_ERC173.sol";
-import "./erc/721/extensions/Package_ERC721Metadata.sol";
-import "./erc/2981/Package_ERC2981.sol";
-import "./security/Package_Guardian.sol";
+import "./packages/Bundle_ERC721.sol";
 
 /**
  * @title My ERC721 Token
- *
- * @dev Extends ERC721 non-fungible token standard
  */
-contract MyERC721Token is Package_ERC2981, Package_ERC721Metadata, Package_ERC173, ERC165, Package_Guardian {
-    /**
-     * @dev Handles ETH received by contract
-     */
-
+contract MyERC721Token is Bundle {
     receive() external payable {}
     fallback() external payable {}
 
-    /**
-     * @dev Events
-     */
-
     event Withdraw(address operator, address receiver, uint256 value);
-
-    /**
-     * @dev MyERC721Token definitions
-     */
 
     mapping(address => bool) private _whitelist;
     bool private _pauseMint = true;
 
-    /**
-     * @dev Set ERC721 and ERC173 constructor values
-     */
-
-    constructor() Package_ERC721Metadata("My ERC721 Token", "TKN", "pr34v31/prereveal.json") Package_ERC173(msg.sender) {
+    constructor() {
         // Bored Ape Yacht Club used as an example
         _setRevealURI("QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq", false);
     }
@@ -132,19 +106,5 @@ contract MyERC721Token is Package_ERC2981, Package_ERC721Metadata, Package_ERC17
         require(success, "MyERC721Token: ether transfer failed");
 
         emit Withdraw(msg.sender, _account, balance);
-    }
-
-    /**
-     * @dev Return `true` if supports interface
-     */
-
-    function supportsInterface(bytes4 interfaceId) public pure override(ERC165) returns (bool) {
-        return
-            interfaceId == type(ERC165).interfaceId ||
-            interfaceId == type(ERC173).interfaceId ||
-            interfaceId == type(ERC721).interfaceId ||
-            interfaceId == type(ERC721Metadata).interfaceId ||
-            interfaceId == type(ERC721Receiver).interfaceId ||
-            interfaceId == type(ERC2981).interfaceId;
     }
 }
