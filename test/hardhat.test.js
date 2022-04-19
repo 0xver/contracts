@@ -143,12 +143,21 @@ const { ethers } = require("hardhat")
 
     // Check reveal URI
     expect(await MyERC721Token.checkURI(1)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1")
+    expect(await MyERC721Token.checkURI(5)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/5")
+    expect(await MyERC721Token.checkURI(0)).equal("Token ID out of range")
+    expect(await MyERC721Token.checkURI(6)).equal("Token ID out of range")
 
     // Reveal tokens
     await MyERC721Token.connect(addr1).reveal()
 
+    // Stop check
+    expect(await MyERC721Token.checkURI(5)).equal("Tokens have been revealed")
+
     // Token URI should return correct identifier
     expect(await MyERC721Token.tokenURI(1)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1")
+    expect(await MyERC721Token.tokenURI(5)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/5")
+    expect(await MyERC721Token.tokenURI(0)).equal("Token ID out of range")
+    expect(await MyERC721Token.tokenURI(6)).equal("Token ID out of range")
 
     // Mint with addr3
     await MyERC721Token.onChainWhitelistMint(addr3.address, 20, 1)
