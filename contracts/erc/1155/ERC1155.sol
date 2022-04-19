@@ -6,9 +6,6 @@ pragma solidity ^0.8.0;
  * @title ERC1155 standard
  */
 interface ERC1155 {
-    /**
-     * @dev Events
-     */
     event TransferSingle(address indexed _operator, address indexed _from, address indexed _to, uint256 _id, uint256 _value);
 
     event TransferBatch(address indexed _operator, address indexed _from, address indexed _to, uint256[] _ids, uint256[] _values);
@@ -17,9 +14,6 @@ interface ERC1155 {
 
     event URI(string _value, uint256 indexed _id);
 
-    /**
-     * @dev Functions
-     */
     function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes calldata _data) external;
 
     function safeBatchTransferFrom(address _from, address _to, uint256[] calldata _ids, uint256[] calldata _values, bytes calldata _data) external;

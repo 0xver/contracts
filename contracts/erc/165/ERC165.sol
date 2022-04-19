@@ -6,9 +6,5 @@ pragma solidity ^0.8.0;
  * @title ERC165 standard
  */
 interface ERC165 {
-    /**
-     * @dev Functions
-     */
-
     function supportsInterface(bytes4 interfaceId) external view returns (bool);
 }

@@ -6,17 +6,9 @@ pragma solidity ^0.8.0;
  * @title ERC20 standard
  */
 interface ERC20 {
-    /**
-     * @dev Events
-     */
-
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
 
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
-
-    /**
-     * @dev Functions
-     */
 
     function name() external view returns (string memory);
 
