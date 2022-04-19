@@ -124,7 +124,7 @@ const { ethers } = require("hardhat")
     expect(await MyERC721Token.paused()).equal(true)
 
     // Initiate minting
-    await MyERC721Token.unpause(false)
+    await MyERC721Token.unpause()
 
     // Should return true
     expect(await MyERC721Token.paused()).equal(false)
