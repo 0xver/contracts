@@ -14,11 +14,12 @@ contract MyERC721Token is Bundle {
     event Withdraw(address operator, address receiver, uint256 value);
 
     mapping(address => bool) private _whitelist;
-    bool private _pauseMint = true;
+    bool private _pauseMint;
 
     constructor() {
         // Bored Ape Yacht Club used as an example
         _setRevealURI("QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq", false);
+        _pauseMint = true;
     }
 
     /**
@@ -40,11 +41,19 @@ contract MyERC721Token is Bundle {
     }
 
     /**
-     * @dev Initiate minting
+     * @dev Unpause minting
      */
 
-    function unpause(bool _status) public ownership {
-        _pauseMint = _status;
+    function unpause() public ownership {
+        _pauseMint = false;
+    }
+
+    /**
+     * @dev Pause minting
+     */
+
+    function pause() public ownership {
+        _pauseMint = true;
     }
 
     /**
