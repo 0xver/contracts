@@ -25,47 +25,35 @@ contract MyERC20Token is Bundle {
     /**
      * @dev Token staking
      */
-
     function stake(uint256 _value) public gate {
         require(balanceOf(msg.sender) > 0, "MyERC20Token: zero token balance");
-
         _timestamp[msg.sender] = block.timestamp;
         _staked[msg.sender] = _value;
-
         _transfer(msg.sender, address(this), _value);
-
         emit Stake(msg.sender, _value, 30 days);
     }
 
     /**
      * @dev Token claim
      */
-
     function claim() public gate {
         require(_staked[msg.sender] > 0, "MyERC20Token: no tokens staked");
         require(_timestamp[msg.sender] + 30 days <= block.timestamp, "MyERC20Token: lock time has not completed");
-
         uint256 staked = _staked[msg.sender];
-
         _transfer(address(this), msg.sender, staked);
-
         _timestamp[msg.sender] = 0;
         _staked[msg.sender] = 0;
-
         // Add claim reward logic below and adjust event accordingly
-
         emit Claim(msg.sender, staked);
     }
 
     /**
      * @dev Withdraw ether from contract
      */
-
     function withdraw(address _to) public ownership {
         uint256 balance = address(this).balance;
         (bool success, ) = payable(_to).call{value: address(this).balance}("");
         require(success, "MyERC20Token: ether transfer failed");
-
         emit Withdraw(msg.sender, _to, balance);
     }
 }

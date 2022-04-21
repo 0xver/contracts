@@ -88,7 +88,6 @@ contract Package_ERC721Metadata is Package_ERC721, ERC721Metadata {
 
     function _reveal() internal {
         require(_setURI == true, "ERC721: reveal URI not set");
-
         _isRevealed = true;
     }
 

@@ -19,7 +19,6 @@ contract Package_ERC173 is ERC173 {
         _transferOwnership(owner_);
     }
 
-
     function owner() public view override returns (address) {
         return _owner;
     }
@@ -31,7 +30,7 @@ contract Package_ERC173 is ERC173 {
     function _transferOwnership(address _newOwner) internal {
         address previousOwner = _owner;
         _owner = _newOwner;
-    
+
         emit OwnershipTransferred(previousOwner, _newOwner);
     }
 }

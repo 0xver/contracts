@@ -49,13 +49,10 @@ contract Package_ERC20 is ERC20 {
 
     function transferFrom(address _from, address _to, uint256 _value) public override returns (bool) {
         require(balanceOf(_from) >= _value, "ERC20: value exceeds balance");
-
         if (msg.sender != _from) {
             require(balanceOf(_from) >= allowance(_from, msg.sender), "ERC20: allowance exceeds balance");
-
             _allowances[_from][msg.sender] -= _value;
         }
-
         _transfer(_from, _to, _value);
         return true;
     }
@@ -63,9 +60,7 @@ contract Package_ERC20 is ERC20 {
     function approve(address _spender, uint256 _value) public override returns (bool) {
         require(_spender != address(0), "ERC20: cannot approve the zero address");
         require(_spender != msg.sender, "ERC20: cannot approve the owner");
-
         _allowances[msg.sender][_spender] = _value;
-
         emit Approval(msg.sender, _spender, _value);
         return true;
     }
@@ -76,28 +71,22 @@ contract Package_ERC20 is ERC20 {
 
     function _transfer(address _from, address _to, uint256 _value) internal {
         require(_to != address(0), "ERC20: transfer to the zero address");
-
         _balances[_from] -= _value;
         _balances[_to] += _value;
-
         emit Transfer(_from, _to, _value);
     }
 
     function _mint(address _to, uint256 _value) internal {
         require(_to != address(0), "ERC20: cannot mint to the zero address");
-
         _totalSupply += _value;
         _balances[_to] += _value;
-
         emit Transfer(address(0), _to, _value);
     }
 
     function _burn(address _from, uint256 _value) internal {
         require(_from != address(0), "ERC20: burn cannot be from zero address");
-
         _balances[_from] -= _value;
         _totalSupply -= _value;
-
         emit Transfer(_from, address(0), _value);
     }
 }

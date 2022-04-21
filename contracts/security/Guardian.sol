@@ -14,7 +14,6 @@ contract Guardian {
 
     modifier gate() {
         require(_locked == false, "Guardian: reentrancy denied");
-
         _locked = true;
         _;
         _locked = false;

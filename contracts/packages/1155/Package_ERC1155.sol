@@ -24,10 +24,8 @@ contract Package_ERC1155 is ERC1155 {
         require(_to != address(0), "ERC1155: cannot mint to the zero address");
         require(_id != 0, "ERC1155: not a valid token");
         require(_id <= _currentTokenId(), "ERC1155: not a valid token");
-
         _totalSupply[_id] += _value;
         _ownerBalance[_id][_to] += _value;
-
         emit TransferSingle(msg.sender, address(0), _to, _id, _value);
     }
 
@@ -43,12 +41,9 @@ contract Package_ERC1155 is ERC1155 {
         require(_from == msg.sender || isApprovedForAll(_from, msg.sender), "ERC1155: unauthorized transfer");
         require(_ownerBalance[_id][_from] >= _value, "ERC1155: value exceeds balance");
         require(_to != address(0), "ERC1155: cannot transfer to the zero address");
-
         _ownerBalance[_id][_from] -= _value;
         _ownerBalance[_id][_to] += _value;
-
         emit TransferSingle(msg.sender, _from, _to, _id, _value);
-
         _safeTransferCheck(msg.sender, _from, _to, _id, _value, _data);
     }
 
@@ -56,44 +51,34 @@ contract Package_ERC1155 is ERC1155 {
         require(_from == msg.sender || isApprovedForAll(_from, msg.sender), "ERC1155: unauthorized transfer");
         require(_ids.length == _values.length, "ERC1155: ids and amounts length mismatch");
         require(_to != address(0), "ERC1155: cannot transfer to the zero address");
-
         for (uint256 i = 0; i < _ids.length; ++i) {
             uint256 id = _ids[i];
             uint256 value = _values[i];
             require(_ownerBalance[id][_from] >= value, "ERC1155: insufficient balance for transfer");
-
             _ownerBalance[id][_from] -= value;
             _ownerBalance[id][_to] += value;
         }
-
         emit TransferBatch(msg.sender, _from, _to, _ids, _values);
-
         _safeBatchTransferCheck(msg.sender, _from, _to, _ids, _values, _data);
     }
     
     function balanceOf(address _owner, uint256 _id) public view override returns (uint256) {
         require(_owner != address(0), "ERC1155: cannot get balance for the zero address");
-
         return _ownerBalance[_id][_owner];
     }
 
     function balanceOfBatch(address[] memory _owners, uint256[] memory _ids) public view override returns (uint256[] memory) {
         require(_owners.length == _ids.length, "ERC1155: accounts and ids length mismatch");
-
         uint256[] memory batchBalances = new uint256[](_owners.length);
-
         for (uint256 i = 0; i < _owners.length; ++i) {
             batchBalances[i] = balanceOf(_owners[i], _ids[i]);
         }
-
         return batchBalances;
     }
 
     function setApprovalForAll(address _operator, bool _approved) public override {
         require(msg.sender != _operator, "ERC1155: cannot set approval for self");
-
         _operatorApproval[msg.sender][_operator] = _approved;
-
         emit ApprovalForAll(msg.sender, _operator, _approved);
     }
 

@@ -3,10 +3,6 @@
 pragma solidity ^0.8.0;
 
 library utils {
-    /**
-     * @dev Converts integer to string
-     */
-
     function toString(uint256 value) internal pure returns (string memory) {
         if (value == 0) return "0";
         uint256 temp = value;
@@ -23,10 +19,6 @@ library utils {
         }
         return string(buffer);
     }
-
-    /**
-     * @dev Merkle Proof
-     */
 
     function verify(bytes32[] memory proof, bytes32 root, bytes32 leaf) internal pure returns (bool) {
         return processProof(proof, leaf) == root;
