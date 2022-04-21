@@ -14,6 +14,7 @@ contract MyERC721Token is Bundle {
     event Withdraw(address operator, address receiver, uint256 value);
 
     mapping(address => bool) private _whitelist;
+
     bool private _pauseMint;
 
     constructor() {
@@ -23,27 +24,8 @@ contract MyERC721Token is Bundle {
     }
 
     /**
-     * @dev Add accounts to on-chain whitelist
-     */
-
-    function addToWhitelist(address[] memory _accounts) public ownership {
-        for (uint i = 0; i < _accounts.length; i++) {
-            _whitelist[_accounts[i]] = true;
-        }
-    }
-
-    /**
-     * @dev Return `true` if account is whitelisted
-     */
-
-    function whitelisted(address _account) public view returns (bool) {
-        return _whitelist[_account];
-    }
-
-    /**
      * @dev Unpause minting
      */
-
     function unpause() public ownership {
         _pauseMint = false;
     }
@@ -51,7 +33,6 @@ contract MyERC721Token is Bundle {
     /**
      * @dev Pause minting
      */
-
     function pause() public ownership {
         _pauseMint = true;
     }
@@ -59,7 +40,6 @@ contract MyERC721Token is Bundle {
     /**
      * @dev Return `true` if minting is paused
      */
-
     function paused() public view returns (bool) {
         return _pauseMint;
     }
@@ -67,7 +47,6 @@ contract MyERC721Token is Bundle {
     /**
      * @dev Reveal token collection
      */
-
     function reveal() public ownership {
         _reveal();
     }
@@ -75,45 +54,41 @@ contract MyERC721Token is Bundle {
     /**
      * @dev Set Merkle root
      */
-    
     function setMerkleRoot(bytes32 _merkleRoot) public ownership {
         _setMerkleRoot(_merkleRoot);
     }
 
     /**
-     * @dev Mint function for off-chain whitelist
+     * @dev Mint function for whitelist
      */
-
-    function merkleProofMint(address _account, bytes32[] calldata _merkleProof, uint256 _percent, uint256 _quantity) public gate {
-        for (uint256 i=0; i < _quantity; i++) {
-            _merkleProofMint(_account, _merkleProof);
-            _setTokenRoyalty(_currentTokenId(), _account, _percent);
-        }
+    function privateMint(uint256 _quantity, bytes32[] calldata _merkleProof) public merkleProof(msg.sender, _merkleProof) {
+        require(_pauseMint == false, "MyERC721Token: minting is paused");
+        _mint(msg.sender, _quantity);
     }
 
     /**
-     * @dev Mint function for on-chain whitelist
+     * @dev Mint function for public
      */
-
-    function onChainWhitelistMint(address _account, uint256 _percent, uint256 _quantity) public gate {
+    function publicMint(uint256 _quantity) public gate {
         require(_pauseMint == false, "MyERC721Token: minting is paused");
-        require(_whitelist[_account] == true, "MyERC721Token: account not on whitelist");
-        _whitelist[_account] = false;
-        for (uint256 i=0; i < _quantity; i++) {
-            _mint(_account);
-            _setTokenRoyalty(_currentTokenId(), _account, _percent);
-        }
+        _mint(msg.sender, _quantity);
+    }
+
+    /**
+     * @dev Mint function for airdrop
+     */
+    function airdrop(address _to, uint256 _quantity) public ownership {
+        require(_quantity + totalSupply() <= 4200, "TheHappyChemicalClub: maximum tokens minted");
+        _mint(_to, _quantity);
     }
 
     /**
      * @dev Withdraw ether from contract
      */
-
     function withdraw(address _account) public ownership {
         uint256 balance = address(this).balance;
         (bool success, ) = payable(_account).call{value: address(this).balance}("");
         require(success, "MyERC721Token: ether transfer failed");
-
         emit Withdraw(msg.sender, _account, balance);
     }
 }
