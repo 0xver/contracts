@@ -181,6 +181,9 @@ const { ethers } = require("hardhat")
 
     // Spend addr3 tokens with addr1
     await MyERC721Token.connect(addr1).transferFrom(addr3.address, addr1.address, 1)
+
+    // Test airdrop
+    await MyERC721Token.airdrop(addr1.address, 1)
   })
 })
 
