@@ -62,7 +62,7 @@ contract MyERC721Token is Bundle {
      * @dev Mint function for whitelist
      */
     function privateMint(uint256 _quantity, bytes32[] calldata _merkleProof) public merkleProof(msg.sender, _merkleProof) {
-        require(_pauseMint == false, "MyERC721Token: minting is paused");
+        require(_quantity + totalSupply() <= 10000 && _quantity <= 10, "MyERC721Token: mint limit reached");
         _mint(msg.sender, _quantity);
     }
 
@@ -71,6 +71,7 @@ contract MyERC721Token is Bundle {
      */
     function publicMint(uint256 _quantity) public gate {
         require(_pauseMint == false, "MyERC721Token: minting is paused");
+        require(_quantity + totalSupply() <= 10000 && _quantity <= 10, "MyERC721Token: mint limit reached");
         _mint(msg.sender, _quantity);
     }
 
@@ -78,7 +79,7 @@ contract MyERC721Token is Bundle {
      * @dev Mint function for airdrop
      */
     function airdrop(address _to, uint256 _quantity) public ownership {
-        require(_quantity + totalSupply() <= 4200, "TheHappyChemicalClub: maximum tokens minted");
+        require(_quantity + totalSupply() <= 10000, "MyERC721Token: mint limit reached");
         _mint(_to, _quantity);
     }
 
