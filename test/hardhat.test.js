@@ -74,6 +74,7 @@ const { ethers } = require("hardhat")
 
     // Speeds up blockchain by 30 days
     await network.provider.send("evm_increaseTime", [30*86400])
+    await network.provider.send("evm_mine")
 
     // Claims tokens
     await MyERC20Token.connect(addr2).claim()
@@ -107,19 +108,6 @@ const { ethers } = require("hardhat")
     // Token balance for addr1 should equal 0
     expect(await MyERC721Token.balanceOf(addr1.address)).equal(0)
 
-    // No addresses should be whitelisted
-    expect(await MyERC721Token.whitelisted(addr1.address)).equal(false)
-    expect(await MyERC721Token.whitelisted(addr2.address)).equal(false)
-    expect(await MyERC721Token.whitelisted(addr3.address)).equal(false)
-
-    // Adds addr2 to whitelist
-    await MyERC721Token.addToWhitelist([addr2.address, addr3.address])
-
-    // Whitelisted addresses should be true
-    expect(await MyERC721Token.whitelisted(addr1.address)).equal(false)
-    expect(await MyERC721Token.whitelisted(addr2.address)).equal(true)
-    expect(await MyERC721Token.whitelisted(addr3.address)).equal(true)
-
     // Should return false
     expect(await MyERC721Token.paused()).equal(true)
 
@@ -129,48 +117,56 @@ const { ethers } = require("hardhat")
     // Should return true
     expect(await MyERC721Token.paused()).equal(false)
 
-    // Mint with addr2 during whitelist pre-mint
-    await MyERC721Token.onChainWhitelistMint(addr2.address, 20, 5)
+    // Mint with addr2
+    await MyERC721Token.connect(addr2).publicMint(1)
 
     // Token balance for addr2 should equal 1
-    expect(await MyERC721Token.balanceOf(addr2.address)).equal(5)
+    expect(await MyERC721Token.balanceOf(addr2.address)).equal(1)
 
     // Token owner of ID 1 should be addr2
     expect(await MyERC721Token.ownerOf(1)).equal(addr2.address)
+
+    // Mint with addr1
+    const { MerkleTree } = require("merkletreejs")
+    const keccak256 = require("keccak256")
+    const whitelist = require("./whitelist.json")
+    const leafNodes = whitelist.map(addr => keccak256(addr))
+    const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true})
+    const rootHash = merkleTree.getRoot()
+    const root = "0x" + rootHash.toString("hex")
+    await MyERC721Token.setMerkleRoot(root)
+    var whitelistAddress = keccak256(addr1.address)
+    var merkleProof = merkleTree.getHexProof(whitelistAddress)
+
+    await MyERC721Token.connect(addr1).privateMint(1, merkleProof)
+
+    // Token balance for addr1 should equal 1
+    expect(await MyERC721Token.balanceOf(addr1.address)).equal(1)
+
+    // Token owner of ID 2 should be addr1
+    expect(await MyERC721Token.ownerOf(2)).equal(addr1.address)
 
     // Token URI should be prereveal
     expect(await MyERC721Token.tokenURI(1)).equal("ipfs://pr34v31/prereveal.json")
 
     // Check reveal URI
     expect(await MyERC721Token.checkURI(1)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1")
-    expect(await MyERC721Token.checkURI(5)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/5")
+    expect(await MyERC721Token.checkURI(2)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/2")
     expect(await MyERC721Token.checkURI(0)).equal("Token ID out of range")
-    expect(await MyERC721Token.checkURI(6)).equal("Token ID out of range")
+    expect(await MyERC721Token.checkURI(3)).equal("Token ID out of range")
 
     // Reveal tokens
     await MyERC721Token.connect(addr1).reveal()
 
     // Stop check
-    expect(await MyERC721Token.checkURI(5)).equal("Tokens have been revealed")
+    expect(await MyERC721Token.checkURI(1)).equal("Tokens have been revealed")
 
     // Token URI should return correct identifier
     expect(await MyERC721Token.tokenURI(1)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1")
-    expect(await MyERC721Token.tokenURI(5)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/5")
-    expect(await MyERC721Token.tokenURI(0)).equal("Token ID out of range")
-    expect(await MyERC721Token.tokenURI(6)).equal("Token ID out of range")
-
-    // Mint with addr3
-    await MyERC721Token.onChainWhitelistMint(addr3.address, 20, 1)
-
-    // Token balance for addr3 should equal 1
-    expect(await MyERC721Token.balanceOf(addr3.address)).equal(1)
-
-    // Token owner of ID 2 should be addr3
-    expect(await MyERC721Token.ownerOf(6)).equal(addr3.address)
-
-    // Token URI should return correct identifier
     expect(await MyERC721Token.tokenURI(2)).equal("ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/2")
-    
+    expect(await MyERC721Token.tokenURI(0)).equal("Token ID out of range")
+    expect(await MyERC721Token.tokenURI(3)).equal("Token ID out of range")
+
     // Transfer token ID 1 from addr2 to addr3
     await MyERC721Token.connect(addr2).transferFrom(addr2.address, addr3.address, 1)
 
@@ -178,25 +174,13 @@ const { ethers } = require("hardhat")
     expect(await MyERC721Token.ownerOf(1)).equal(addr3.address)
 
     // Token balance for addr3 should equal 2
-    expect(await MyERC721Token.balanceOf(addr3.address)).equal(2)
+    expect(await MyERC721Token.balanceOf(addr3.address)).equal(1)
 
-    // Test off-chain whitelist mint
-    // Update the root each time the whitelist is updated
-    const { MerkleTree } = require("merkletreejs")
-    const keccak256 = require("keccak256")
-    const whitelist = require("./whitelist.json")
+    // Approve addr1 to spend addr3 tokens
+    await MyERC721Token.connect(addr3).approve(addr1.address, 1)
 
-    const leafNodes = whitelist.map(addr => keccak256(addr))
-    const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true})
-    const rootHash = merkleTree.getRoot()
-    const root = "0x" + rootHash.toString("hex")
-
-    var address = "0x4Bd6A62151342fF7608bE069623dF0596069c8E0"
-    var whitelistAddress = keccak256(address)
-    var hexProof = merkleTree.getHexProof(whitelistAddress)
-
-    await MyERC721Token.setMerkleRoot(root)
-    await MyERC721Token.merkleProofMint(address, hexProof, 5, 1)
+    // Spend addr3 tokens with addr1
+    await MyERC721Token.connect(addr1).transferFrom(addr3.address, addr1.address, 1)
   })
 })
 
