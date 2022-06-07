@@ -4,7 +4,7 @@ const { ethers } = require("hardhat")
 /**
  * @dev Tests contract deployments
  */
- describe("", function () {
+describe("", function () {
   it("Contract deployments", async function () {
     /**
      * @dev Test contract deployments
@@ -24,7 +24,7 @@ const { ethers } = require("hardhat")
 /**
  * @dev Tests MyERC20Token functions
  */
- describe("", function () {
+describe("", function () {
   it("MyERC20Token functions", async function () {
     /**
      * @dev Contract deployments
@@ -87,7 +87,7 @@ const { ethers } = require("hardhat")
 /**
  * @dev Tests MyERC721Token functions
  */
- describe("", function () {
+describe("", function () {
   it("MyERC721Token functions", async function () {
     /**
      * @dev Contract deployments
@@ -190,7 +190,7 @@ const { ethers } = require("hardhat")
 /**
  * @dev Tests MyERC1155Token functions
  */
- describe("", function () {
+describe("", function () {
   it("MyERC1155Token functions", async function () {
     /**
      * @dev Contract deployments
@@ -267,8 +267,8 @@ const { ethers } = require("hardhat")
 /**
  * @dev Checks supports interface for MyERC20Token
  */
- describe("", function () {
-  it("Supports interface for MyERC721Token", async function () {
+describe("", function () {
+  it("Supports interface for MyERC20Token", async function () {
     /**
      * @dev Contract deployments
      */
@@ -293,7 +293,7 @@ const { ethers } = require("hardhat")
 /**
  * @dev Checks supports interface for MyERC721Token
  */
- describe("", function () {
+describe("", function () {
   it("Supports interface for MyERC721Token", async function () {
     /**
      * @dev Contract deployments
@@ -331,7 +331,7 @@ const { ethers } = require("hardhat")
 /**
  * @dev Checks supports interface for MyERC1155Token
  */
- describe("", function () {
+describe("", function () {
   it("Supports interface for MyERC1155Token", async function () {
     /**
      * @dev Contract deployments
