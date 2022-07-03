@@ -1,14 +1,36 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.4;
+
+import "./interface/IERC173.sol";
 
 /**
- * @dev ERC173 standard
+ * @dev Implementation of the ERC173
  */
-interface ERC173 {
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+contract ERC173 is IERC173 {
+    address private _owner;
 
-    function owner() view external returns (address);
+    modifier ownership() {
+        require(owner() == msg.sender, "ERC173: caller is not the owner");
+        _;
+    }
 
-    function transferOwnership(address _newOwner) external;
+    constructor(address owner_) {
+        _transferOwnership(owner_);
+    }
+
+    function owner() public view override returns (address) {
+        return _owner;
+    }
+
+    function transferOwnership(address _newOwner) public override ownership {
+        _transferOwnership(_newOwner);
+    }
+
+    function _transferOwnership(address _newOwner) internal {
+        address previousOwner = _owner;
+        _owner = _newOwner;
+
+        emit OwnershipTransferred(previousOwner, _newOwner);
+    }
 }
