@@ -10,16 +10,28 @@ import "./interface/receiver/IERC1155Receiver.sol";
  * @dev Implementation of ERC1155
  */
 contract ERC1155 is IERC1155 {
+    // Mapping token ID to address and balance
     mapping(uint256 => mapping(address => uint256)) private _ownerBalance;
+
+    // Mapping address to approved spender address for all tokens
     mapping(address => mapping(address => bool)) private _operatorApproval;
 
+    // Mapping token ID to total supply of tokens
     mapping(uint256 => uint256) private _totalSupply;
+
+    // Current token ID variable
     uint256 private _currentId = 0;
 
+    /**
+     * @dev Initialize new token ID
+     */
     function _initTokenId() internal {
         _currentId += 1;
     }
 
+    /**
+     * @dev Mint quantity of tokens for initialized token ID
+     */
     function _mint(address _to, uint256 _id, uint256 _value) internal {
         require(_to != address(0), "ERC1155: cannot mint to the zero address");
         require(_id != 0, "ERC1155: not a valid token");
@@ -29,14 +41,23 @@ contract ERC1155 is IERC1155 {
         emit TransferSingle(msg.sender, address(0), _to, _id, _value);
     }
 
+    /**
+     * @dev Returns current token ID
+     */
     function _currentTokenId() internal view returns (uint256) {
         return _currentId;
     }
 
+    /**
+     * @dev Returns total supply
+     */
     function totalSupply(uint256 _id) public view returns (uint256) {
         return _totalSupply[_id];
     }
 
+    /**
+     * @dev Safe transfer from spender address and emit event
+     */
     function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes memory _data) public override {
         require(_from == msg.sender || isApprovedForAll(_from, msg.sender), "ERC1155: unauthorized transfer");
         require(_ownerBalance[_id][_from] >= _value, "ERC1155: value exceeds balance");
@@ -47,6 +68,9 @@ contract ERC1155 is IERC1155 {
         _safeTransferCheck(msg.sender, _from, _to, _id, _value, _data);
     }
 
+    /**
+     * @dev Safe batch transfer from spender address and emit event
+     */
     function safeBatchTransferFrom(address _from, address _to, uint256[] memory _ids, uint256[] memory _values, bytes memory _data) public override {
         require(_from == msg.sender || isApprovedForAll(_from, msg.sender), "ERC1155: unauthorized transfer");
         require(_ids.length == _values.length, "ERC1155: ids and amounts length mismatch");
@@ -61,12 +85,18 @@ contract ERC1155 is IERC1155 {
         emit TransferBatch(msg.sender, _from, _to, _ids, _values);
         _safeBatchTransferCheck(msg.sender, _from, _to, _ids, _values, _data);
     }
-    
+
+    /**
+     * @dev Returns owner balance
+     */
     function balanceOf(address _owner, uint256 _id) public view override returns (uint256) {
         require(_owner != address(0), "ERC1155: cannot get balance for the zero address");
         return _ownerBalance[_id][_owner];
     }
 
+    /**
+     * @dev Returns batch of owner balances
+     */
     function balanceOfBatch(address[] memory _owners, uint256[] memory _ids) public view override returns (uint256[] memory) {
         require(_owners.length == _ids.length, "ERC1155: accounts and ids length mismatch");
         uint256[] memory batchBalances = new uint256[](_owners.length);
@@ -76,16 +106,25 @@ contract ERC1155 is IERC1155 {
         return batchBalances;
     }
 
+    /**
+     * @dev Allows all tokens to be transferred by approved address
+     */
     function setApprovalForAll(address _operator, bool _approved) public override {
         require(msg.sender != _operator, "ERC1155: cannot set approval for self");
         _operatorApproval[msg.sender][_operator] = _approved;
         emit ApprovalForAll(msg.sender, _operator, _approved);
     }
 
+    /**
+     * @dev Returns `true` if operator is approved to spend owner tokens
+     */
     function isApprovedForAll(address _owner, address _operator) public view override returns (bool) {
         return _operatorApproval[_owner][_operator];
     }
 
+    /**
+     * @dev Handles the receipt of single token transfers
+     */
     function _safeTransferCheck(address _operator, address _from, address _to, uint256 _id, uint256 _value, bytes memory _data) private {
         uint256 size;
         assembly {size := extcodesize(_to)}
@@ -102,6 +141,9 @@ contract ERC1155 is IERC1155 {
         }
     }
 
+    /**
+     * @dev Handles the receipt of batch token transfers
+     */
     function _safeBatchTransferCheck(address _operator, address _from, address _to, uint256[] memory _ids, uint256[] memory _values, bytes memory _data) private {
         uint256 size;
         assembly {size := extcodesize(_to)}

@@ -13,7 +13,7 @@ contract ERC1155Test is ERC1155Supports {
      */
     function initTokenId(string memory _cid) public ownership {
         _initTokenId();
-        _setTokenURI(_currentTokenId(), _cid);
+        _setTokenCID(_currentTokenId(), _cid);
     }
 
     /**
