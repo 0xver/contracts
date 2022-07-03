@@ -3,7 +3,7 @@ const { ethers } = require("hardhat")
 const deploy = require("../modules/deploy.test.js")
 const { MerkleTree } = require("merkletreejs")
 const keccak256 = require("keccak256")
-const whitelist = require("./whitelist.json")
+const whitelist = require("../whitelist/whitelist.json")
 
 /**
  * @dev Merkle tree functions
@@ -72,8 +72,8 @@ describe("", function () {
         // Check reveal URI
         expect(await ERC721Test.checkURI(1)).equal("ipfs://QmQFkLSQysj94s5GvTHPyzTxrawwtjgiiYS2TBLgrvw8CW/1")
         expect(await ERC721Test.checkURI(2)).equal("ipfs://QmQFkLSQysj94s5GvTHPyzTxrawwtjgiiYS2TBLgrvw8CW/2")
-        expect(await ERC721Test.checkURI(0)).equal("Token ID out of range")
-        expect(await ERC721Test.checkURI(3)).equal("Token ID out of range")
+        expect(await ERC721Test.checkURI(0)).equal("Token does not exist")
+        expect(await ERC721Test.checkURI(3)).equal("Token does not exist")
     
         // Reveal tokens
         await ERC721Test.connect(addr1).reveal()
@@ -84,8 +84,8 @@ describe("", function () {
         // Token URI should return correct identifier
         expect(await ERC721Test.tokenURI(1)).equal("ipfs://QmQFkLSQysj94s5GvTHPyzTxrawwtjgiiYS2TBLgrvw8CW/1")
         expect(await ERC721Test.tokenURI(2)).equal("ipfs://QmQFkLSQysj94s5GvTHPyzTxrawwtjgiiYS2TBLgrvw8CW/2")
-        expect(await ERC721Test.tokenURI(0)).equal("Token ID out of range")
-        expect(await ERC721Test.tokenURI(3)).equal("Token ID out of range")
+        expect(await ERC721Test.tokenURI(0)).equal("Token does not exist")
+        expect(await ERC721Test.tokenURI(3)).equal("Token does not exist")
     
         // Transfer token ID 1 from addr2 to addr3
         await ERC721Test.connect(addr2).transferFrom(addr2.address, addr3.address, 1)
