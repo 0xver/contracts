@@ -4,7 +4,7 @@
 
 ## An Ethereum smart contract library for common standards
 
-Use this library to reference ERC standards and example implementations of their functions. Edit any smart contract in `contracts/contracts` and use the template contracts `MyERC20Token.sol`, `MyERC721Token.sol`, or `MyERC1155Token.sol` to extend ERC contracts.
+Use this library to reference ERC standards and example implementations of their functions. Edit and test contracts in `contracts/contracts/test` and `contracts/test`.
 
 # Installation
 Clone contracts
@@ -14,23 +14,4 @@ gh repo clone 0xver/contracts
 Install packages
 ```
 npm install
-```
-
-# Usage
-### Getting Started
-Navigate to `contracts/contracts` and create a smart contract using `MyERC20Token.sol`, `MyERC721Token.sol`, or `MyERC1155Token.sol`
-```
-cd contracts && open .
-```
-
-### Compile
-Run the command to compile `MyERC20Token.sol`, `MyERC721Token.sol`, or `MyERC1155Token.sol`
-```
-npx hardhat compile
-```
-
-### Test
-Run the command to test `MyERC20Token.sol`, `MyERC721Token.sol`, or `MyERC1155Token.sol` using `contracts/test/hardhat.test.js`
-```
-npx hardhat test
 ```
