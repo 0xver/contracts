@@ -10,10 +10,6 @@ interface IERC20 {
 
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 
-    function name() external view returns (string memory);
-
-    function symbol() external view returns (string memory);
-
     function decimals() external view returns (uint8);
 
     function totalSupply() external view returns (uint256);

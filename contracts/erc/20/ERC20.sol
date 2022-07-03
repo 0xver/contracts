@@ -8,38 +8,39 @@ import "./interface/IERC20.sol";
  * @dev Implementation of ERC20
  */
 contract ERC20 is IERC20 {
+    // Mapping address to balance
     mapping(address => uint256) private _balances;
+
+    // Mapping owner address to spender address allowance
     mapping(address => mapping(address => uint256)) private _allowances;
 
-    string private _name;
-    string private _symbol;
+    // Total supply variable
     uint256 private _totalSupply;
 
-    constructor(string memory name_, string memory symbol_) {
-        _name = name_;
-        _symbol = symbol_;
-    }
-
-    function name() public view override returns (string memory) {
-        return _name;
-    }
-
-    function symbol() public view override returns (string memory) {
-        return _symbol;
-    }
-
-    function decimals() public pure override returns (uint8) {
+    /**
+     * @dev Default to 18 decimals
+     */
+    function decimals() public pure virtual override returns (uint8) {
         return 18;
     }
 
+    /**
+     * @dev Returns total supply
+     */
     function totalSupply() public view override returns (uint256) {
         return _totalSupply;
     }
 
+    /**
+     * @dev Returns owner balance
+     */
     function balanceOf(address _owner) public view override returns (uint256) {
         return _balances[_owner];
     }
 
+    /**
+     * @dev Transfers tokens with _transfer
+     */
     function transfer(address _to, uint256 _value) public override returns (bool) {
         require(balanceOf(msg.sender) >= _value, "ERC20: value exceeds balance");
 
@@ -47,6 +48,9 @@ contract ERC20 is IERC20 {
         return true;
     }
 
+    /**
+     * @dev Transfers tokens from spender address with _transfer
+     */
     function transferFrom(address _from, address _to, uint256 _value) public override returns (bool) {
         require(balanceOf(_from) >= _value, "ERC20: value exceeds balance");
         if (msg.sender != _from) {
@@ -57,6 +61,9 @@ contract ERC20 is IERC20 {
         return true;
     }
 
+    /**
+     * @dev Approves address for spending tokens
+     */
     function approve(address _spender, uint256 _value) public override returns (bool) {
         require(_spender != address(0), "ERC20: cannot approve the zero address");
         require(_spender != msg.sender, "ERC20: cannot approve the owner");
@@ -65,10 +72,16 @@ contract ERC20 is IERC20 {
         return true;
     }
 
+    /**
+     * @dev Returns spender allowance
+     */
     function allowance(address _owner, address _spender) public view override returns (uint256) {
         return _allowances[_owner][_spender];
     }
 
+    /**
+     * @dev Transfers tokens and emits event
+     */
     function _transfer(address _from, address _to, uint256 _value) internal {
         require(_to != address(0), "ERC20: transfer to the zero address");
         _balances[_from] -= _value;
@@ -76,6 +89,9 @@ contract ERC20 is IERC20 {
         emit Transfer(_from, _to, _value);
     }
 
+    /**
+     * @dev Mints tokens and emits event
+     */
     function _mint(address _to, uint256 _value) internal {
         require(_to != address(0), "ERC20: cannot mint to the zero address");
         _totalSupply += _value;
@@ -83,6 +99,9 @@ contract ERC20 is IERC20 {
         emit Transfer(address(0), _to, _value);
     }
 
+    /**
+     * @dev Burns tokens and emits event
+     */
     function _burn(address _from, uint256 _value) internal {
         require(_from != address(0), "ERC20: burn cannot be from zero address");
         _balances[_from] -= _value;
