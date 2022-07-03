@@ -14,7 +14,7 @@ contract ERC721Test is ERC721Supports {
     // Construct contract with _setRevealURI ahead of time
     constructor() {
         // Azuki used as an example
-        _setRevealURI("QmQFkLSQysj94s5GvTHPyzTxrawwtjgiiYS2TBLgrvw8CW", false);
+        _setRevealCID("QmQFkLSQysj94s5GvTHPyzTxrawwtjgiiYS2TBLgrvw8CW", false);
         _pauseMint = true;
     }
 
@@ -36,6 +36,13 @@ contract ERC721Test is ERC721Supports {
      */
     function paused() public view returns (bool) {
         return _pauseMint;
+    }
+
+    /**
+     * @dev Check URI before reveal
+     */
+    function checkURI(uint256 _tokenId) public view returns (string memory) {
+        return _checkURI(_tokenId);
     }
 
     /**
