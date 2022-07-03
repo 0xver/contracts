@@ -5,12 +5,13 @@ pragma solidity ^0.8.4;
 import "../../erc/165/interface/IERC165.sol";
 import "../../erc/173/ERC173.sol";
 import "../../erc/721/ERC721Metadata.sol";
+import "../../merkle/Merkle.sol";
 import "../../security/Guardian.sol";
 
 /**
  * @dev Supports interface and bundling
  */
-contract ERC721Supports is ERC721Metadata, IERC165, ERC173, Guardian {
+contract ERC721Supports is ERC721Metadata, IERC165, ERC173, Merkle, Guardian {
     receive() external payable {}
     fallback() external payable {}
 
