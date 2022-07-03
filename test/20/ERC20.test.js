@@ -11,7 +11,7 @@ const deploy = require("../modules/deploy.test.js")
         const [addr1, addr2, addr3] = await ethers.getSigners()
     
         // Deploys tokens
-        const ERC20Test = await deploy("ERC20Test")
+        const ERC20Test = await deploy("ERC20Test", 1000000000)
     
         // Token balance of addr1 should equal total supply of 1 billion tokens
         expect(await ERC20Test.balanceOf(addr1.address)).equal(ethers.utils.parseEther("1000000000"))
@@ -61,7 +61,7 @@ const deploy = require("../modules/deploy.test.js")
 describe("", function () {
     it("Supports interface for ERC20", async function () {
         // Deploys tokens
-        const ERC20Test = await deploy("ERC20Test")
+        const ERC20Test = await deploy("ERC20Test", 1000000000)
     
         // ERC165 support should return true
         expect(await ERC20Test.supportsInterface(ethers.utils.hexlify(0x01ffc9a7))).equal(true)

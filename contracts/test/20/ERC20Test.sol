@@ -21,8 +21,8 @@ contract ERC20Test is ERC20Supports {
     mapping(address => uint256) private _staked;
 
     // Mint token supply to deployer address
-    constructor() {
-        _mint(msg.sender, 1000000000 * 10 ** decimals());
+    constructor(uint256 _tokenSupply) {
+        _mint(msg.sender, _tokenSupply * 10 ** decimals());
     }
 
     /**
